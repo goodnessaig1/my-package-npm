@@ -1,0 +1,10 @@
+/* src/styles/global.css */
+@import "./fonts.css";
+
+:root {
+  --font-primary: "Satoshi", sans-serif;
+}
+
+* {
+  font-family: var(--font-primary);
+}
