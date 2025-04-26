@@ -1,6 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import EventDetails from "./EventDetails/EventDetails";
-import { ComponentProps, IEventType, QuestionList } from "../types/event-types";
+import {
+  ComponentProps,
+  IEventType,
+  QuestionList,
+  TicketDiscountList,
+} from "../types/event-types";
 import "./index.css";
 import "../styles/global.css";
 import Loader from "./Loader/Loader";
@@ -44,7 +49,7 @@ export interface IEventData {
     image: string;
     bio: string;
   }[];
-  guests: any[]; // No given structure for guests
+  guests: any[];
   tickets: IITickets;
 }
 
@@ -60,18 +65,30 @@ export type IITickets = {
   isDisabled?: boolean;
 }[];
 
-const GruveEventWidgets: React.FC<ComponentProps> = ({
+export interface GruveEventWidgetsProps {
+  eventAddress: string;
+  isTest?: boolean;
+  config?: {
+    buttonColor: string;
+  };
+}
+
+const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   eventAddress,
   isTest = false,
+  config,
 }) => {
   const [eventDetails, setEventDetails] = useState<IEventData | null>(null);
   const [eventDetailsWithId, setEventDetailsWithId] =
     useState<IEventType | null>(null);
   const [questions, setQuestions] = useState<QuestionList>([]);
+  const [coupons, setCoupons] = useState<any>([]);
+  const [ticketBalances, setTicketBalances] = useState([]);
+  const [couponData, setCouponData] = useState<TicketDiscountList>([]);
 
   const BASE_URL = isTest
-    ? "http://localhost:3000/api"
-    : "https://beta.gruve.events/api";
+    ? "http://localhost:3000"
+    : "https://beta.gruve.events";
 
   const BACKEND_URL = isTest
     ? "https://backend.gruve.events"
@@ -85,7 +102,7 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
 
   const fetchRates = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/fetch-rates`);
+      const response = await fetch(`${BASE_URL}/api/fetch-rates`);
 
       const result = await response.json();
       setRates(result);
@@ -97,10 +114,9 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
   const fetchEventDetails = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch(
-        `${BASE_URL}/fetch-event-details?eventAddress=${eventAddress}`
+        `${BASE_URL}/api/fetch-event-details?eventAddress=${eventAddress}`
       );
 
       if (!response.ok) {
@@ -108,8 +124,8 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
       }
 
       const result = await response.json();
-      const balances = await result?.balances;
       setQuestions(result?.questions);
+      setTicketBalances(result?.balances);
       setLoading(false);
       setEventDetails(result?.data);
       setEventDetailsWithId(result?.eventDetailsWithId);
@@ -120,7 +136,23 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
     }
   };
 
+  const fetchCoupon = async () => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/discount/check/${eventAddress.toLowerCase()}`
+      );
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+      const result = await response.json();
+      setCouponData(result?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleClick = () => {
+    fetchCoupon();
     setOpen(true);
     if (!eventDetails) {
       fetchEventDetails();
@@ -128,9 +160,15 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
     }
   };
 
+  const buttonColor = config?.buttonColor ? config?.buttonColor : "#ea445a";
+
   return (
     <div className="">
-      <div onClick={handleClick} className="event-details-btn">
+      <div
+        onClick={handleClick}
+        style={{ background: buttonColor }}
+        className="event-details-btn"
+      >
         Get ticket
       </div>
       {loading ? (
@@ -145,8 +183,12 @@ const GruveEventWidgets: React.FC<ComponentProps> = ({
           setOpen={setOpen}
           questions={questions}
           rates={rates}
+          coupons={coupons}
+          couponData={couponData}
+          ticketBalances={ticketBalances}
           BACKEND_URL={BACKEND_URL}
           BASE_URL={BASE_URL}
+          buttonColor={buttonColor}
         />
       )}
     </div>

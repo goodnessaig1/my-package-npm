@@ -1,4 +1,3 @@
-/* src/styles/global.css */
 @import "./fonts.css";
 
 :root {
@@ -7,4 +6,5 @@
 
 * {
   font-family: var(--font-primary);
+  letter-spacing: 0;
 }

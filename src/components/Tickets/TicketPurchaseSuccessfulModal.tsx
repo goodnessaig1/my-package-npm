@@ -5,12 +5,14 @@ import CloseIcon from "../../asset/CloseIcon";
 
 interface Props {
   close: () => void;
-  setShowTicketPurchaseSuccess: (val: boolean) => void;
+  BASE_URL: string;
+  buttonColor: string;
 }
 
 const TicketPurchaseSuccessfulModal: React.FC<Props> = ({
-  setShowTicketPurchaseSuccess,
   close,
+  BASE_URL,
+  buttonColor,
 }) => {
   return (
     <div className="modal-body">
@@ -31,9 +33,16 @@ const TicketPurchaseSuccessfulModal: React.FC<Props> = ({
           folder. Sign in to view more details and manage your registration.
         </p>
 
-        <div className="sign-in-button">
-          <div className="">Sign in to Gruve</div>
-        </div>
+        <a
+          href={BASE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="sign-in-button"
+        >
+          <div className="" style={{ background: buttonColor }}>
+            Sign in to Gruve
+          </div>
+        </a>
       </div>
     </div>
   );

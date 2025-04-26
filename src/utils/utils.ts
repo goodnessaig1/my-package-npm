@@ -118,3 +118,102 @@ export const createUserAnswerArray = (tickets: any[]) => {
     }))
   );
 };
+
+export function findTicketTypeIdWithHighestQuantity(tickets: any) {
+  let highestQuantity = 0;
+  let highestQuantityTicketTypeId = null;
+
+  tickets.forEach((ticket: any) => {
+    if (ticket.quantity > highestQuantity) {
+      highestQuantity = ticket.quantity;
+      highestQuantityTicketTypeId = ticket._ticketType;
+    }
+  });
+
+  return highestQuantityTicketTypeId;
+}
+
+export function applyDiscount(
+  tickets: any[],
+  ticketTypeId: number,
+  count: number,
+  eventCurrency: string,
+  discountAmount: number,
+  discountType: "AMOUNT" | "PERCENT",
+  cost: Record<number, number>
+): [any[], number] {
+  let discountApplied = 0;
+  let discountAmountApplied = 0;
+
+  const updatedTickets = tickets.map((ticket) => ({ ...ticket }));
+
+  for (let i = 0; i < updatedTickets.length && discountApplied < count; i++) {
+    const ticket = updatedTickets[i];
+    const currentType = ticket.ticketTypeId;
+
+    if (
+      (currentType === ticketTypeId || ticketTypeId === 0) &&
+      !ticket.isDiscounted
+    ) {
+      const ticketCost = cost[currentType];
+      const calculatedDiscount =
+        discountType === "AMOUNT"
+          ? discountAmount
+          : (ticketCost * discountAmount) / 100;
+
+      ticket.appliedDiscount = calculatedDiscount;
+
+      ticket.discountAmount =
+        discountType === "PERCENT"
+          ? discountAmount
+          : `${eventCurrency === "USD" ? "$" : "₦"}${discountAmount}`;
+
+      ticket.isDiscounted = true;
+
+      discountAmountApplied += calculatedDiscount;
+      discountApplied++;
+    }
+  }
+
+  return [updatedTickets, discountAmountApplied];
+}
+
+export function updatedTickets(
+  tickets: any[],
+  eventDetails: any,
+  coupons: any[]
+) {
+  if (eventDetails) {
+    return eventDetails.map((detail: any, index: number) => {
+      const ticket = tickets.find((t) => t.ticketName === detail.sectionName);
+
+      const ticketTypeId = ticket ? ticket.ticketTypeId : index + 1;
+      const coupon = coupons.find(
+        (c) => c.ticketType === ticketTypeId && c.isEnabled
+      );
+
+      const originalCost = ticket?.cost ?? detail.cost;
+      let discountedCost = originalCost;
+
+      if (coupon) {
+        if (coupon.discountType === "PERCENT") {
+          discountedCost =
+            originalCost - originalCost * (coupon.discountValue / 100);
+        } else {
+          discountedCost = Math.max(0, originalCost - coupon.discountValue);
+        }
+      }
+
+      return {
+        ...detail,
+        ...(ticket || {}),
+        quantity: detail?.quantity ?? 0,
+        cost: originalCost,
+        discountedCost,
+        // ticketType: ticketTypeId,
+        ticketName: ticket?.ticketName ?? detail.sectionName,
+        ticketTypeId: ticketTypeId,
+      };
+    });
+  }
+}

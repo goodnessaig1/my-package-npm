@@ -8,7 +8,9 @@ import TicketForm, {
   SubmittedTicket,
 } from "./TicketForm";
 import {
+  applyDiscount,
   createUserAnswerArray,
+  findTicketTypeIdWithHighestQuantity,
   PAYSTACK_KEY,
   randomizeLastFourDigits,
 } from "../../utils/utils";
@@ -28,6 +30,9 @@ interface CheckoutProps {
   setShowTicketPurchaseSuccess: (val: boolean) => void;
   setListedTickets: React.Dispatch<React.SetStateAction<ITicketListed[]>>;
   setSelectedTickets: React.Dispatch<React.SetStateAction<SelectedTicket[]>>;
+  coupons: any[];
+  updatedTicketsData: ITicketListed[];
+  buttonColor: string;
   BACKEND_URL: string;
   BASE_URL: string;
 }
@@ -46,8 +51,11 @@ const Checkout: React.FC<CheckoutProps> = ({
   currentCurrency,
   rates,
   openPaymentsModal,
+  coupons,
+  updatedTicketsData,
   BACKEND_URL,
   BASE_URL,
+  buttonColor,
 }) => {
   const [tickets, setTickets] = useState<ITicketListed[]>(listedTickets);
   const [isMultiple, setIsMultiple] = useState("yes");
@@ -55,18 +63,46 @@ const Checkout: React.FC<CheckoutProps> = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [showApplyCoupon, setShowApplyCoupon] = useState(false);
+  const [discountCodeRes, setDiscountCodeRes] = useState<{
+    [key: string]: any;
+  }>({});
+
+  const [couponError, setCouponError] = useState<string>("");
+
+  const max = findTicketTypeIdWithHighestQuantity(tickets);
+
   const rate = rates[`NGN${currentCurrency}`];
+  const defaultCoupon =
+    coupons.find((elem) => elem.ticketType === max) ?? coupons[0];
+  const isTicketSupportAutoDis =
+    defaultCoupon?.ticketTypeId > 0
+      ? listedTickets.filter(
+          (eachticket) => eachticket?._ticketType == defaultCoupon?.ticketType
+        )?.length > 0
+      : listedTickets.filter((eachticket) => eachticket?.cost > 0)?.length > 0;
+
+  const [couponAppliedAmount, setCouponAppliedAmount] = useState(0);
+
+  const [discountCode, setDiscountCode] = useState<string>(
+    isTicketSupportAutoDis === true ? defaultCoupon?.code : ""
+  );
 
   useEffect(() => {
     if (!tickets.length) return;
 
     const updatedTickets = tickets.map((eachTicket) => {
-      const questions =
-        isMultiple === "no"
-          ? questionsToDisplay.slice(0, 1)
-          : questionsToDisplay.filter(
-              (q) => q.sectionName === eachTicket.ticketName
-            );
+      let questions: any[] = [];
+
+      if (isMultiple === "no") {
+        questions = questionsToDisplay.filter(
+          (q) => q.ticketId === eachTicket.ticketTypeId
+        );
+      } else {
+        questions = questionsToDisplay.filter(
+          (q) => q.sectionName === eachTicket.ticketName
+        );
+      }
 
       return {
         ...eachTicket,
@@ -92,7 +128,7 @@ const Checkout: React.FC<CheckoutProps> = ({
       email,
       amount: 0,
       tickets,
-      // discountCode, // make sure this is defined in scope
+      discountCode,
     };
 
     setIsSubmitting(true);
@@ -121,7 +157,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     if (!Array.isArray(userAnswerArray) || userAnswerArray.length === 0) return;
 
     try {
-      const response = await fetch(`${BASE_URL}/questions`, {
+      const response = await fetch(`${BASE_URL}/api/questions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -138,15 +174,6 @@ const Checkout: React.FC<CheckoutProps> = ({
       console.error("Error submitting user answers:", error);
     }
   };
-
-  useEffect(() => {
-    if (!tickets) return;
-    let totalPrice = 0;
-    tickets?.forEach((eachTickets) => {
-      totalPrice += eachTickets?.cost * eachTickets?.quantity;
-    });
-    setTotalPrice(totalPrice);
-  }, [tickets]);
 
   const handleSubmit = async (data: SubmittedTicket[]): Promise<void> => {
     let totalPrice = 0;
@@ -172,7 +199,7 @@ const Checkout: React.FC<CheckoutProps> = ({
     }
   };
 
-  const coupon = "";
+  const coupon = couponAppliedAmount === 0 ? "" : discountCode;
 
   const handleDeleteTicket = (indexToRemove: number) => {
     const removedTicket = listedTickets[indexToRemove];
@@ -314,6 +341,108 @@ const Checkout: React.FC<CheckoutProps> = ({
     setOpenPaymentsModal(false);
   };
 
+  const handleCoupon = async (eventAddress: string, code: string) => {
+    try {
+      setShowApplyCoupon(true);
+      const res = await fetch(`${BACKEND_URL}/api/discount/check`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventAddress,
+          code: code.toUpperCase(),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+      setShowApplyCoupon(false);
+      setDiscountCodeRes({});
+      const coupon = data?.data as {
+        utilityLeft: number;
+        isEnabled: boolean;
+        limitPerUser: number;
+        ticketType: number;
+        discountValue: number;
+        discountType: "PERCENT" | "AMOUNT";
+      };
+
+      const eventCurrency = eventDetailsWithId?.currency
+        ? eventDetailsWithId?.currency
+        : "NGN";
+      const costMap: any =
+        updatedTicketsData &&
+        updatedTicketsData
+          .map((elem: any, index) => ({ ...elem, _ticketType: index + 1 }))
+          .reduce(
+            (result, value) => ({
+              ...result,
+              [value._ticketType]: value.cost,
+            }),
+            {}
+          );
+
+      const [modifiedTickets, discountAmountApplied] = applyDiscount(
+        tickets.map((elem: any) => ({
+          ...elem,
+          discountAmount: 0,
+          isDiscounted: false,
+        })),
+        coupon.ticketType,
+        Math.min(coupon.utilityLeft, coupon.limitPerUser),
+        eventCurrency,
+        coupon.discountValue,
+        coupon.discountType,
+        costMap
+      );
+
+      setCouponAppliedAmount(discountAmountApplied);
+      setTickets(modifiedTickets);
+    } catch (e: any) {
+      setDiscountCodeRes({
+        ...discountCodeRes,
+        message: e?.response?.data.message,
+      });
+      setShowApplyCoupon(false);
+      setCouponError(e.message);
+    }
+    return;
+  };
+
+  const generateTicketTypes = (
+    ticketArray: ITicketListed[],
+    currentCurrency: string
+  ) => {
+    if (!ticketArray || ticketArray.length === 0) return;
+
+    let totalPrice = 0;
+
+    ticketArray.forEach((eachTicket) => {
+      const ticketCost =
+        eachTicket.discountedCost !== eachTicket.cost
+          ? eachTicket.discountedCost
+          : eachTicket.cost;
+
+      totalPrice += ticketCost * eachTicket.quantity;
+    });
+
+    const defaultCurrency = eventDetailsWithId?.currency ?? "NGN";
+
+    setTotalPrice(
+      (totalPrice - couponAppliedAmount) *
+        (rates[`${currentCurrency}${defaultCurrency}`] ?? 1)
+    );
+  };
+
+  useEffect(() => {
+    if (tickets) {
+      generateTicketTypes(tickets, currentCurrency);
+    }
+  }, [tickets, currentCurrency, couponAppliedAmount]);
+
   return (
     <div className="">
       <div className="modal">
@@ -334,8 +463,17 @@ const Checkout: React.FC<CheckoutProps> = ({
           errorMessage={errorMessage}
           currentCurrency={currentCurrency}
           selectedTickets={selectedTickets}
+          handleCoupon={handleCoupon}
           handleDeleteTicket={handleDeleteTicket}
           openPaymentsModal={openPaymentsModal}
+          discountCode={discountCode}
+          setDiscountCode={setDiscountCode}
+          showApplyCoupon={showApplyCoupon}
+          coupon={coupon}
+          couponError={couponError}
+          buttonColor={buttonColor}
+          setCouponError={setCouponError}
+          couponAppliedAmount={couponAppliedAmount}
         />
       </div>
     </div>
