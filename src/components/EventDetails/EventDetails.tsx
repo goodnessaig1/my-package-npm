@@ -10,8 +10,12 @@ import PoweredBy from "../../asset/PoweredBy";
 import CloseIcon from "../../asset/CloseIcon";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
 import Checkout from "../Checkout/Checkout";
-import { expandTickets } from "../../utils/utils";
-import { IEventType, QuestionList } from "../../types/event-types";
+import { expandTickets, updatedTickets } from "../../utils/utils";
+import {
+  IEventType,
+  QuestionList,
+  TicketDiscountList,
+} from "../../types/event-types";
 import TicketPurchaseSuccessfulModal from "../Tickets/TicketPurchaseSuccessfulModal";
 import { ITicketListed } from "../Checkout/TicketForm";
 
@@ -22,8 +26,12 @@ interface EventDetailsProps {
   rates: Record<string, number>;
   questions: QuestionList;
   eventDetailsWithId: IEventType | null;
+  coupons: any[];
+  ticketBalances: number[];
+  couponData: TicketDiscountList;
   BACKEND_URL: string;
   BASE_URL: string;
+  buttonColor: string;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({
@@ -33,8 +41,12 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   rates,
   questions,
   eventDetailsWithId,
+  coupons,
+  couponData,
+  ticketBalances,
   BACKEND_URL,
   BASE_URL,
+  buttonColor,
 }) => {
   const [currentCurrency, setCurrentCurrency] = useState("NGN");
   const [selectedTickets, setSelectedTickets] = useState<SelectedTicket[]>([]);
@@ -55,9 +67,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
     setOpen(false);
     setOpenCheckout(false);
     setSelectedTickets([]);
-    if (showTicketPurchaseSuccess) {
-      setShowTicketPurchaseSuccess(false);
-    }
+    setShowTicketPurchaseSuccess(false);
   };
 
   const isSelected = selectedTickets.length > 0;
@@ -68,7 +78,11 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       setOpenCheckout(true);
     }
   };
-
+  const updatedTicketsData = updatedTickets(
+    listedTickets,
+    eventDetails?.tickets,
+    couponData
+  );
   return (
     <Modal
       isOpen={open}
@@ -78,7 +92,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
       {showTicketPurchaseSuccess ? (
         <TicketPurchaseSuccessfulModal
           close={handleClose}
-          setShowTicketPurchaseSuccess={setShowTicketPurchaseSuccess}
+          BASE_URL={BASE_URL}
+          buttonColor={buttonColor}
         />
       ) : (
         <>
@@ -86,6 +101,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
             <>
               <Checkout
                 rates={rates}
+                coupons={coupons}
                 setOpenCheckout={setOpenCheckout}
                 setOpenPaymentsModal={setOpenPaymentsModal}
                 openPaymentsModal={openPaymentsModal}
@@ -97,6 +113,8 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 setShowTicketPurchaseSuccess={setShowTicketPurchaseSuccess}
                 setSelectedTickets={setSelectedTickets}
                 questionsToDisplay={questionsToDisplay}
+                updatedTicketsData={updatedTicketsData}
+                buttonColor={buttonColor}
                 handleCloseModal={handleClose}
                 BACKEND_URL={BACKEND_URL}
                 BASE_URL={BASE_URL}
@@ -131,15 +149,17 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                       <Tickets
                         currentCurrency={currentCurrency}
                         setCurrentCurrency={setCurrentCurrency}
-                        tickets={eventDetails?.tickets}
+                        tickets={updatedTicketsData}
                         eventDetails={eventDetails}
                         selectedTickets={selectedTickets}
                         rates={rates}
+                        ticketBalances={ticketBalances}
                         setSelectedTickets={setSelectedTickets}
                       />
                     </div>
                     <button
                       disabled={!isSelected}
+                      style={{ background: buttonColor }}
                       className={`get-tickets-btn ${
                         !isSelected && "not-selected"
                       }`}

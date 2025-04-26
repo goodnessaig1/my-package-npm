@@ -22,6 +22,21 @@ type SavedEvent = {
   accountAddress: string;
 };
 
+type DiscountType = "PERCENT" | "FIXED";
+
+export interface TicketDiscount {
+  utilityLeft: number;
+  isEnabled: boolean;
+  limitPerUser: number;
+  ticketType: number;
+  discountValue: number;
+  discountType: DiscountType;
+  code: string;
+  expireAt: string;
+}
+
+export type TicketDiscountList = TicketDiscount[];
+
 export type IEventType = {
   id: string;
   eventAddress: string;

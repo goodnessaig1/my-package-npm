@@ -1,9 +1,4 @@
-import React, { useContext } from "react";
-// import { useTranslation } from "react-i18next";
-// import { Context } from "../../utils/context";
-// import { formatCurrency } from "../../utils/formatCurrency";
-// import { useExchangeRate } from "../../utils/hooks";
-// import { useStoreState } from "easy-peasy";
+import React from "react";
 import "./OrderSummary.css";
 import { formatCurrency } from "../../utils/utils";
 
@@ -11,6 +6,7 @@ interface Ticket {
   quantity: number;
   ticketName: string;
   cost: number;
+  discountedCost: number;
 }
 
 interface Coupon {
@@ -21,11 +17,11 @@ interface Coupon {
 interface Props {
   ticketsArray: Ticket[];
   total: number;
-  currentCurrency: string;
+  currentCurrency: string | undefined;
   rates: Record<string, number>;
   defaultCurrency: string | undefined;
-  //   coupon?: Coupon;
-  //   couponAppliedAmount: number;
+  coupon?: Coupon;
+  couponAppliedAmount: any;
 }
 
 const OrderSummary: React.FC<Props> = ({
@@ -33,6 +29,7 @@ const OrderSummary: React.FC<Props> = ({
   total,
   currentCurrency,
   rates,
+  couponAppliedAmount,
   defaultCurrency,
 }) => {
   return (
@@ -40,19 +37,32 @@ const OrderSummary: React.FC<Props> = ({
       <h2 className="order-summary-title">Order Summary</h2>
 
       {ticketsArray &&
-        ticketsArray?.map((ticket, index) => (
-          <div className="summary-row" key={`ticketsArray-summary-${index}`}>
-            <span>
-              {ticket.quantity} {ticket.ticketName}
-            </span>
-            <span>
-              {/* {currentCurrency === "USD" ? "$" : "₦"}
-            {formatCurrency(
-              ticket.cost * ticket.quantity * conversionRate || 0
-            )} */}
-            </span>
-          </div>
-        ))}
+        ticketsArray?.map((ticket, index) => {
+          const hasDiscount = ticket.cost !== ticket.discountedCost;
+          const ticketCost = hasDiscount ? ticket.discountedCost : ticket.cost;
+          return (
+            <div className="summary-row" key={`ticketsArray-summary-${index}`}>
+              <span>
+                {ticket.quantity} {ticket.ticketName}
+              </span>
+              <span>
+                {ticket.cost === 0 ? (
+                  "free"
+                ) : (
+                  <>
+                    {currentCurrency === "USD" ? "$" : "₦"}
+                    {formatCurrency(
+                      ticketCost *
+                        ticket.quantity *
+                        (rates[`${currentCurrency}${defaultCurrency}`] ?? 1) ||
+                        0
+                    )}
+                  </>
+                )}
+              </span>
+            </div>
+          );
+        })}
 
       <hr className="divider" />
 
@@ -60,15 +70,36 @@ const OrderSummary: React.FC<Props> = ({
         <span>Subtotal</span>
 
         <span>
-          {`${currentCurrency === "USD" ? "$" : "₦"}${
-            formatCurrency(
-              total * (rates[`${currentCurrency}${defaultCurrency}`] ?? 1)
-            ) ?? 0
-          }`}
+          {`${currentCurrency === "USD" ? "$" : "₦"}${formatCurrency(
+            total +
+              couponAppliedAmount *
+                (rates[`${currentCurrency}${defaultCurrency}`] ?? 1) || 0
+          )}
+`}
         </span>
       </div>
 
       <hr className="divider" />
+
+      {couponAppliedAmount > 0 && (
+        <>
+          <div className="summary-row">
+            <span>Discount</span>
+
+            <span className="discount">
+              -
+              {`${currentCurrency === "USD" ? "$" : "₦"}${
+                formatCurrency(
+                  +couponAppliedAmount *
+                    (rates[`${currentCurrency}${defaultCurrency}`] ?? 1)
+                ) ?? 0
+              }`}
+            </span>
+          </div>
+
+          <hr className="divider" />
+        </>
+      )}
 
       <div className="summary-row total">
         <span>Total</span>

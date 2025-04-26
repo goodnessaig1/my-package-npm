@@ -15,6 +15,10 @@
   transition: max-height 0.3s ease;
 }
 
+.truncated-text::first-letter {
+  text-transform: uppercase;
+}
+
 .truncated-text.truncated {
   display: -webkit-box;
   -webkit-line-clamp: 2;

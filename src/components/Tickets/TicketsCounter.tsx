@@ -38,8 +38,9 @@ interface TicketCounterPorps {
   currentCurrency: string;
   rates: RatesProp;
   eventDetails: any;
-  setSelectedTickets: React.Dispatch<React.SetStateAction<SelectedTicket[]>>;
+  setSelectedTickets: any;
   selectedTickets: SelectedTicket[];
+  ticketBalances: number[];
 }
 
 interface Question {
@@ -54,10 +55,14 @@ export interface SelectedTicket {
   cost: number;
   ticketName: string;
   id?: string;
+  discountedCost: number;
+  discountedPrice?: number;
   requiredQuestion?: Question[];
 }
 
 export type ITicket = {
+  discountedCost: number;
+  ticketTypeId: number;
   _ticketType: string;
   sectionName: string;
   quantity: number;
@@ -67,7 +72,14 @@ export type ITicket = {
   maxOrder: number;
   isDisabled: boolean;
   questions: any[];
-  ticketType: string;
+  ticketType: number;
+
+  isOnSale?: boolean;
+  earlyBird?: {
+    endDate?: string;
+    endTime?: string;
+  };
+  discountedPrice?: number;
 };
 
 export default function TicketCounter({
@@ -77,87 +89,150 @@ export default function TicketCounter({
   rates,
   setSelectedTickets,
   selectedTickets,
+  ticketBalances,
 }: TicketCounterPorps) {
-  const handleTicketQuantityChange = (newValue: number, ticket: ITicket) => {
-    setSelectedTickets((prev) => {
-      const exists = prev.find((t) => t._ticketType === ticket._ticketType);
+  const handleTicketQuantityChange = (
+    newValue: number,
+    index: number,
+    ticket: ITicket
+  ) => {
+    setSelectedTickets((prev: any) => {
+      const updated = [...prev];
 
-      if (exists) {
-        if (newValue === 0) {
-          return prev.filter((t) => t._ticketType !== ticket._ticketType);
+      const ticketToUpdateIndex = prev.findIndex(
+        (t: any) =>
+          t.ticketName === ticket.sectionName && t.cost === ticket.cost
+      );
+
+      if (newValue === 0) {
+        if (ticketToUpdateIndex !== -1) {
+          updated.splice(ticketToUpdateIndex, 1);
         }
-        return prev.map((t) =>
-          t._ticketType === ticket._ticketType
-            ? { ...t, quantity: newValue }
-            : t
-        );
       } else {
-        return [
-          ...prev,
-          {
-            _ticketType: ticket._ticketType,
-            ticketName: ticket.sectionName,
-            cost: ticket.cost,
-            quantity: newValue,
-          },
-        ];
+        const updatedTicket = {
+          _ticketType: ticket._ticketType,
+          ticketName: ticket.sectionName,
+          cost: ticket.cost,
+          ticketType: ticket?.ticketTypeId,
+          ticketTypeId: ticket?.ticketTypeId,
+          discountedCost: ticket.discountedCost,
+          discountedPrice: ticket.discountedPrice ?? 0,
+          quantity: newValue,
+        };
+
+        if (ticketToUpdateIndex !== -1) {
+          updated[ticketToUpdateIndex] = updatedTicket;
+        } else {
+          updated.push(updatedTicket);
+        }
       }
+
+      return updated;
     });
   };
+
   return (
     <div className="ticket-counter-container">
-      {tickets &&
-        tickets.map((ticket: any, index: number) => {
-          const selected = selectedTickets.find(
-            (t) => t._ticketType === ticket._ticketType
-          );
-          const selectedQuantity = selected?.quantity || 0;
+      {tickets.map((ticket: ITicket, index: number) => {
+        const hasDiscount = ticket.cost !== ticket.discountedCost;
+        const selectedTicket = selectedTickets.find(
+          (t) => t.ticketName === ticket.sectionName && t.cost === ticket.cost
+        );
 
-          return (
-            <div className="ticket-row" key={index}>
-              <div className="ticket-top">
-                <div className="ticket-top-left">
-                  <h4 className="">{ticket.sectionName}</h4>
-                  <span className="">
-                    {ticket.cost === 0 ? (
-                      "Free"
-                    ) : (
-                      <>
-                        {currentCurrency === "USD" ? "$" : "₦"}
+        const selectedQuantity = selectedTicket?.quantity ?? 0;
 
-                        {ticket?.cost && Object.keys(rates).length > 0 ? (
-                          <>
-                            {formatCurrency(
-                              ticket.cost *
-                                (rates[
-                                  `${currentCurrency}${
-                                    eventDetails?.currency ?? "USD"
-                                  }`
-                                ] ?? 1)
-                            )}
-                          </>
-                        ) : (
-                          <>{ticket?.cost.toLocaleString("en-NG")}</>
-                        )}
-                      </>
-                    )}
-                  </span>
+        return (
+          <div className="ticket-row" key={index}>
+            <div className="ticket-top">
+              <div className="ticket-top-left">
+                <div className="ticket-name-holder">
+                  <h4 className="">{ticket.sectionName} </h4>
+                  {hasDiscount && <div className="early-bird">Early bird</div>}
                 </div>
-                <CustomInput
-                  max={ticket.quantity}
-                  value={selectedQuantity}
-                  onChange={(val: any) =>
-                    handleTicketQuantityChange(val, ticket)
-                  }
-                  ticket={ticket}
-                />
+                <span className="">
+                  {ticket.cost === 0 ? (
+                    "Free"
+                  ) : (
+                    <>
+                      {hasDiscount ? (
+                        <div className="early-bird-prices">
+                          <h5>
+                            {currentCurrency === "USD" ? "$" : "₦"}
+                            {ticket?.discountedCost &&
+                            Object.keys(rates).length > 0 ? (
+                              <>
+                                {formatCurrency(
+                                  ticket.discountedCost *
+                                    (rates[
+                                      `${currentCurrency}${
+                                        eventDetails?.currency ?? "USD"
+                                      }`
+                                    ] ?? 1)
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                {ticket?.discountedCost?.toLocaleString(
+                                  "en-NG"
+                                )}
+                              </>
+                            )}
+                          </h5>
+                          <span>
+                            {currentCurrency === "USD" ? "$" : "₦"}
+                            {ticket?.cost && Object.keys(rates).length > 0 ? (
+                              <>
+                                {formatCurrency(
+                                  ticket.cost *
+                                    (rates[
+                                      `${currentCurrency}${
+                                        eventDetails?.currency ?? "USD"
+                                      }`
+                                    ] ?? 1)
+                                )}
+                              </>
+                            ) : (
+                              <>{ticket?.cost?.toLocaleString("en-NG")}</>
+                            )}
+                          </span>
+                        </div>
+                      ) : (
+                        <>
+                          {ticket?.cost && Object.keys(rates).length > 0 ? (
+                            <>
+                              {formatCurrency(
+                                ticket.cost *
+                                  (rates[
+                                    `${currentCurrency}${
+                                      eventDetails?.currency ?? "USD"
+                                    }`
+                                  ] ?? 1)
+                              )}
+                            </>
+                          ) : (
+                            <>{ticket?.cost.toLocaleString("en-NG")}</>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+                </span>
               </div>
-              <div className="ticket-info">
-                <TruncatedText text={ticket?.description} />
-              </div>
+              <CustomInput
+                max={Math.min(ticket.quantity, ticketBalances[index])}
+                value={selectedQuantity}
+                onChange={(val: any) =>
+                  handleTicketQuantityChange(val, index, ticket)
+                }
+                ticket={ticket}
+              />
             </div>
-          );
-        })}
+            <div className="ticket-info">
+              <TruncatedText text={ticket?.description} />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

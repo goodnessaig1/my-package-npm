@@ -29,8 +29,8 @@
 }
 .loading-btn div {
   border: 4px solid #ea445a;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   border-top-color: transparent;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
