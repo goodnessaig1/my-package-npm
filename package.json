@@ -53,6 +53,20 @@
     "rollup-plugin-typescript2": "^0.36.0",
     "typescript": "^5.8.3"
   },
+  "keywords": [
+    "events",
+    "tickets",
+    "host",
+    "echo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goodnessaig1/my-package-npm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/goodnessaig1/my-package-npm.git/issues"
+  },
+  "homepage": "https://github.com/goodnessaig1/my-package-npm.git#readme",
   "resolutions": {
     "react-error-overlay": "6.0.9"
   }

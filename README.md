@@ -26,11 +26,10 @@ function App() {
   return (
     <div>
       <GruveEventWidgets
-        eventId="your-event-id"
+        eventAddress="your-event-address. eg:0x1508DfF27C5BfFC5810976fBCB3************"
         themeColor="#3498db"
-        onTicketSelect={(ticketData) => {
-          console.log("Selected ticket:", ticketData);
-        }}
+        config={{ buttonColor: "#3498db" }}
+       isTest={false} //default to false
       />
     </div>
   );
@@ -43,6 +42,16 @@ export default App;
 ### ⚙️ Props
 
 Prop Name Type Required Description
-eventId string ✅ Yes The unique ID of the event you want to display.
-themeColor string (hex code) ❌ No Primary color for theming the widget (e.g., #FF5733). Defaults if not set.
-onTicketSelect (ticketData: any) => void ❌ No Callback triggered when a ticket is selected. Receives the selected ticket data.
+eventAddress string ✅ Yes The unique address of the event you want to display.
+config object (hex code) ❌ No Primary color for theming the widget (e.g., #FF5733). Defaults if not set.
+
+## 📜 License
+
+This project is licensed under the MIT License.
+You are free to use, modify, and distribute this package for personal and commercial purposes.
+
+---
+
+# 🤝 Contributions
+
+Contributions are welcome! Feel free to submit a pull request or open an issue if you encounter any bugs or want to add features.
