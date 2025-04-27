@@ -1,6 +1,6 @@
 {
   "name": "echo-test-goody",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
@@ -18,6 +18,7 @@
   "scripts": {
     "build": "rollup -c"
   },
+  "types": "dist/index.d.ts",
   "unpkg": "dist/index.umd.js",
   "peerDependencies": {
     "react": "^18 || ^19",
