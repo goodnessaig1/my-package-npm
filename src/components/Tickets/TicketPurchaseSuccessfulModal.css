@@ -11,15 +11,6 @@
   justify-content: center;
 }
 
-/* .modal-content {
-  background-color: white;
-  padding: 2rem;
-  max-width: 500px;
-  width: 90%;
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-} */
-
 .modal-body {
   padding: 0;
 }
@@ -37,7 +28,6 @@
   margin-bottom: 8px;
   font-weight: 900;
   color: #111021;
-  /* padding: 0 2rem; */
 }
 
 .modal-text {

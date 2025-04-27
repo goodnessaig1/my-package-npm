@@ -210,7 +210,6 @@ export function updatedTickets(
         quantity: detail?.quantity ?? 0,
         cost: originalCost,
         discountedCost,
-        // ticketType: ticketTypeId,
         ticketName: ticket?.ticketName ?? detail.sectionName,
         ticketTypeId: ticketTypeId,
       };

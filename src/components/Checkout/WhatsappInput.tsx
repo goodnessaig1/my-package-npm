@@ -9,7 +9,6 @@ export default function WhatsAppInput({
   index: any;
   fieldName: string;
 }) {
-  //   const fieldName = `whatsAppNumber_${index}`;
   const [field] = useField(fieldName);
   const { setFieldValue, values } = useFormikContext();
   const [selectedCode, setSelectedCode] = useState("234");

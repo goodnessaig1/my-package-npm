@@ -41,14 +41,14 @@ export type IEventType = {
   id: string;
   eventAddress: string;
   eventName: string;
-  createdAt: string; // ISO date string
-  startAt: string; // ISO date string
-  endAt: string; // ISO date string
+  createdAt: string;
+  startAt: string;
+  endAt: string;
   eventImg: string;
   organiser: string;
-  tags: string[]; // assuming array of strings
+  tags: string[];
   category: string;
-  hosts: string; // appears to be a serialized array (e.g., "[]"), clarify if otherwise
+  hosts: string;
   location: string;
   ticketTypeCount: number;
   ticketsCount: number;
@@ -61,10 +61,8 @@ export type IEventType = {
   savedEvents: SavedEvent[];
 };
 
-// Array type:
 export type QuestionList = QuestionItem[];
 
-// Declartion file for types and exports from npm-package
 declare module "event-types" {
   export interface TextInputProps {
     type?: string;
@@ -112,7 +110,7 @@ declare module "event-types" {
     eventType: string;
     eventCategory: string;
     isOnlineEvent: boolean;
-    eventLocation: Record<string, string>; // empty object
+    eventLocation: Record<string, string>;
     tags: { value: string; label: string }[];
     _tags: string[];
     _eventName: string;
@@ -143,7 +141,7 @@ declare module "event-types" {
       image: string;
       bio: string;
     }[];
-    guests: any[]; // No given structure for guests
+    guests: any[];
     tickets: IITickets;
   }
 

@@ -367,7 +367,6 @@ const TicketForm: React.FC<Props> = ({
                       group?.firstIndex === index && group?.count > 1;
                     return (
                       <div
-                        // key={ticket.id + index}
                         key={
                           ticket.id
                             ? `${ticket.id}-${index}`
