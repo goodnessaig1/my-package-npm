@@ -40,12 +40,7 @@ export default {
   external: ["react", "react-dom"],
   plugins: [
     external(),
-    postcss({
-  extract: true,
-  minimize: true,
-  sourceMap: true,
-})
-,
+    postcss(),
     resolve({ extensions }),
     commonjs(),
     typescript({
@@ -57,7 +52,7 @@ export default {
       babelHelpers: "bundled",
       exclude: "node_modules/**",
     }),
-    // terser(),
+    terser(),
   ],
 };
 
@@ -103,7 +98,12 @@ export default {
 //   external: ["react", "react-dom"],
 //   plugins: [
 //     external(),
-//     postcss(),
+//     postcss({
+//   extract: true,
+//   minimize: true,
+//   sourceMap: true,
+// })
+// ,
 //     resolve({ extensions }),
 //     commonjs(),
 //     typescript({
@@ -115,6 +115,6 @@ export default {
 //       babelHelpers: "bundled",
 //       exclude: "node_modules/**",
 //     }),
-//     terser(),
+//     // terser(),
 //   ],
 // };
