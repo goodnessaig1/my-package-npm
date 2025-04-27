@@ -40,12 +40,12 @@ export default {
   external: [ "react", "react-dom" ],
   plugins: [
     external(),
-    // postcss(),
-    postcss( {
-      extract: true,
-      minimize: true,
-      sourceMap: true,
-    } ),
+    postcss(),
+    // postcss( {
+    //   extract: true,
+    //   minimize: true,
+    //   sourceMap: true,
+    // } ),
     resolve( { extensions } ),
     commonjs(),
     typescript( {
