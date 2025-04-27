@@ -51,7 +51,6 @@ export default {
     typescript( {
       useTsconfigDeclarationDir: true,
       clean: true,
-      tsconfig: './tsconfig.json',
     } ),
     babel( {
       extensions,

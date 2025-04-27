@@ -18,7 +18,6 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "types": "dist/index.d.ts",
   "unpkg": "dist/index.umd.js",
   "peerDependencies": {
     "react": "^18 || ^19",

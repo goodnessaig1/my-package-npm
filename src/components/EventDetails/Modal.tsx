@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import "./EventDetails.css";
+import type { ReactNode } from "react";
 
-interface ModalProps {
+type ModalProps = {
   isOpen: boolean;
   openPaymentsModal: boolean;
   openCheckout: boolean;
-  children?: any;
-}
+  children?: ReactNode;
+};
 
 const Modal = ({
   isOpen,
