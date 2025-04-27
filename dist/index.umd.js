@@ -223,7 +223,6 @@
           quantity: (_b = detail === null || detail === void 0 ? void 0 : detail.quantity) !== null && _b !== void 0 ? _b : 0,
           cost: originalCost,
           discountedCost,
-          // ticketType: ticketTypeId,
           ticketName: (_c = ticket === null || ticket === void 0 ? void 0 : ticket.ticketName) !== null && _c !== void 0 ? _c : detail.sectionName,
           ticketTypeId: ticketTypeId
         };
@@ -5779,7 +5778,6 @@
     index,
     fieldName
   }) {
-    //   const fieldName = `whatsAppNumber_${index}`;
     const [field] = useField(fieldName);
     const {
       setFieldValue,
