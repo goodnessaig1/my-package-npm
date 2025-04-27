@@ -1,15 +1,38 @@
 {
   "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
     "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "module": "ESNext",
-    "target": "es2019",
-    "lib": ["dom", "es2019"],
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "strict": true,
     "declaration": true,
-    "outDir": "dist"
+    "declarationDir": "dist/types",
+    "emitDeclarationOnly": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "isolatedModules": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
+
+// {
+//   "compilerOptions": {
+//     "jsx": "react-jsx",
+//     "jsxImportSource": "react",
+//     "module": "ESNext",
+//     "target": "es2019",
+//     "lib": ["dom", "es2019"],
+//     "moduleResolution": "Node",
+//     "esModuleInterop": true,
+//     "strict": true,
+//     "declaration": true,
+//     "declarationDir": "dist",
+//     "emitDeclarationOnly": true,
+//     "outDir": "dist",
+//     "isolatedModules": true
+//   },
+//   "include": ["src"],
+//   "exclude": ["node_modules", "dist"]
+// }

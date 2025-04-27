@@ -8,7 +8,7 @@ import terser from "@rollup/plugin-terser";
 import pkg from "./package.json" with { type: "json" };
 
 
-const extensions = [".js", ".jsx", ".ts", ".tsx"];
+const extensions = [ ".js", ".jsx", ".ts", ".tsx" ];
 
 export default {
   input: "src/index.tsx",
@@ -32,26 +32,32 @@ export default {
       globals: {
         react: "React",
         "react-dom": "ReactDOM",
-        "react/jsx-runtime": "jsxRuntime", 
+        "react/jsx-runtime": "jsxRuntime",
       },
       sourcemap: true,
     },
   ],
-  external: ["react", "react-dom"],
+  external: [ "react", "react-dom" ],
   plugins: [
     external(),
-    postcss(),
-    resolve({ extensions }),
+    // postcss(),
+    postcss( {
+      extract: true,
+      minimize: false,
+      sourceMap: true,
+    } ),
+    resolve( { extensions } ),
     commonjs(),
-    typescript({
+    typescript( {
       useTsconfigDeclarationDir: true,
       clean: true,
-    }),
-    babel({
+      tsconfig: './tsconfig.json',
+    } ),
+    babel( {
       extensions,
       babelHelpers: "bundled",
       exclude: "node_modules/**",
-    }),
+    } ),
     terser(),
   ],
 };
