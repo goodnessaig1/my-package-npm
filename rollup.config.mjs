@@ -43,7 +43,7 @@ export default {
     // postcss(),
     postcss( {
       extract: true,
-      minimize: false,
+      minimize: true,
       sourceMap: true,
     } ),
     resolve( { extensions } ),
