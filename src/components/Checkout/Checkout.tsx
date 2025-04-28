@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Checkout.css";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
-import { IEventType, QuestionList } from "../../types/event-types";
+import { IEventType, QuestionList } from "../../../types/echo-test-goody";
 import TicketForm, {
   HandlePurchaseEventParams,
   ITicketListed,

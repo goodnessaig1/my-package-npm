@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import EventDetails from "./EventDetails/EventDetails";
 import {
-  ComponentProps,
   IEventType,
   QuestionList,
   TicketDiscountList,
-} from "../types/event-types";
+} from "../../types/echo-test-goody";
 import "./index.css";
 import "../styles/global.css";
 import Loader from "./Loader/Loader";

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import DeleteIcon from "../../asset/DeleteIcon";
 import { v4 as uuidv4 } from "uuid";
-import { IEventType } from "../../types/event-types";
+import { IEventType } from "../../../types/echo-test-goody";
 import OrderSummary from "../Payment/OrderSummary";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
 import BackArrow from "../../asset/BackArrow";

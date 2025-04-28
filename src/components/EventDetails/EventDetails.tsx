@@ -15,7 +15,7 @@ import {
   IEventType,
   QuestionList,
   TicketDiscountList,
-} from "../../types/event-types";
+} from "../../../types/echo-test-goody";
 import TicketPurchaseSuccessfulModal from "../Tickets/TicketPurchaseSuccessfulModal";
 import { ITicketListed } from "../Checkout/TicketForm";
 

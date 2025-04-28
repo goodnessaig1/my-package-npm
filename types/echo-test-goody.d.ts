@@ -1,9 +1,4 @@
-import React, { Component, ChangeEvent } from "react";
-
-export interface ComponentProps {
-  eventAddress: string;
-  isTest?: boolean;
-}
+import React, { ChangeEvent } from "react";
 
 export type QuestionItem = {
   id: string;
@@ -63,7 +58,7 @@ export type IEventType = {
 
 export type QuestionList = QuestionItem[];
 
-declare module "event-types" {
+declare module "echo-test-goody" {
   export interface TextInputProps {
     type?: string;
     label?: string;
@@ -77,9 +72,12 @@ declare module "event-types" {
     id?: any;
   }
 
-  export interface ComponentProps {
+  export interface GruveEventWidgetsProps {
     eventAddress: string;
     isTest?: boolean;
+    config?: {
+      buttonColor: string;
+    };
   }
 
   export type ITicket = {
@@ -157,7 +155,8 @@ declare module "event-types" {
     isDisabled?: boolean;
   }[];
 
-  export const GruveEventWidgets: React.FC<ComponentProps>;
+  export const GruveEventWidgets: React.FC<GruveEventWidgetsProps>;
+
   export const Textbox: React.FC<TextInputProps>;
 
   export interface DatePickerProps {
@@ -242,4 +241,67 @@ declare module "event-types" {
   }
 
   export const Grid: React.FC<GridProps>;
+}
+
+export interface TagsOptions {
+  value: string;
+  label: string;
+}
+
+export interface IEventInfo {
+  eventImage: string;
+  eventName: string;
+  eventOrganizer: string;
+  description: string;
+  eventType: string;
+  eventCategory: string;
+  isOnlineEvent: boolean;
+  eventLocation: Record<string, string>;
+  tags: { value: string; label: string }[];
+  _tags: string[];
+  _eventName: string;
+  eventLink?: any;
+}
+
+export interface IEventData {
+  timeZone: any;
+  Attendee?: any;
+  tags?: TagsOptions[];
+  currency?: string;
+  info?: IEventInfo;
+  schedules: {
+    endDate: string | number | Date;
+    startTime: any;
+    endTime: any;
+    timeZoneOffset: any;
+    date: string;
+    timeSlots: { startTime: string; endTime: string }[];
+  }[];
+  hosts: {
+    name: string;
+    image: string;
+    bio: string;
+  }[];
+  guests: any[];
+  tickets: IITickets;
+}
+
+export type IITickets = {
+  _ticketType: string;
+  sectionName: string;
+  quantity: number;
+  cost: number;
+  description: string;
+  minOrder: number;
+  maxOrder: number;
+  ticketType: string;
+  isDisabled?: boolean;
+}[];
+
+export interface GruveEventWidgetsProps {
+  eventAddress: string;
+  isTest?: boolean;
+  config?: {
+    buttonColor: string;
+  };
 }
