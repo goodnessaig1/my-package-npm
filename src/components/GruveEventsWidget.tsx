@@ -5,8 +5,8 @@ import {
   QuestionList,
   TicketDiscountList,
 } from "../../types/echo-test-goody";
-import "./index.css";
-import "../styles/global.css";
+import "./index.module.css";
+import "../styles/global.module.css";
 import Loader from "./Loader/Loader";
 
 export interface TagsOptions {
