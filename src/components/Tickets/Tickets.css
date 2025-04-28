@@ -55,10 +55,10 @@
   margin: 0 auto;
 }
 
-.currency-list:hover {
+.list-items:hover {
   background: #eaeaf2;
   cursor: pointer;
-  transition: ease-in-out 300ms;
+  transition: ease-in 300ms;
 }
 
 .ticket-row {

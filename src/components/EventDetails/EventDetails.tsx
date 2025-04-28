@@ -32,6 +32,7 @@ interface EventDetailsProps {
   BACKEND_URL: string;
   BASE_URL: string;
   buttonColor: string;
+  buttonTextColor: string;
 }
 
 const EventDetails: React.FC<EventDetailsProps> = ({
@@ -47,6 +48,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
   BACKEND_URL,
   BASE_URL,
   buttonColor,
+  buttonTextColor,
 }) => {
   const [currentCurrency, setCurrentCurrency] = useState("NGN");
   const [selectedTickets, setSelectedTickets] = useState<SelectedTicket[]>([]);
@@ -94,6 +96,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
           close={handleClose}
           BASE_URL={BASE_URL}
           buttonColor={buttonColor}
+          buttonTextColor={buttonColor}
         />
       ) : (
         <>
@@ -115,6 +118,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                 questionsToDisplay={questionsToDisplay}
                 updatedTicketsData={updatedTicketsData}
                 buttonColor={buttonColor}
+                buttonTextColor={buttonTextColor}
                 handleCloseModal={handleClose}
                 BACKEND_URL={BACKEND_URL}
                 BASE_URL={BASE_URL}
@@ -159,7 +163,10 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                     </div>
                     <button
                       disabled={!isSelected}
-                      style={{ background: buttonColor }}
+                      style={{
+                        background: buttonColor,
+                        color: buttonTextColor,
+                      }}
                       className={`get-tickets-btn ${
                         !isSelected && "not-selected"
                       }`}

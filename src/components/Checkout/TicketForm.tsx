@@ -63,6 +63,7 @@ interface Props {
   totalPrice: number;
   errorMessage: string;
   buttonColor: string;
+  buttonTextColor: string;
   isSubmitting: boolean;
   openPaymentsModal: boolean;
   showApplyCoupon: boolean;
@@ -119,6 +120,7 @@ const TicketForm: React.FC<Props> = ({
   couponError,
   setCouponError,
   buttonColor,
+  buttonTextColor,
 }) => {
   const [data, setData] = useState<any>([]);
   const eventAddress = eventDetailsWithId?.eventAddress;
@@ -596,7 +598,7 @@ const TicketForm: React.FC<Props> = ({
                       tickets: data,
                     })
                   }
-                  style={{ background: buttonColor }}
+                  style={{ background: buttonColor, color: buttonTextColor }}
                   className="submit-btn"
                 >
                   Finalize payment
@@ -614,7 +616,7 @@ const TicketForm: React.FC<Props> = ({
                 </div>
               ) : (
                 <button
-                  style={{ background: buttonColor }}
+                  style={{ background: buttonColor, color: buttonTextColor }}
                   type="submit"
                   className="submit-btn"
                 >

@@ -7,12 +7,14 @@ interface Props {
   close: () => void;
   BASE_URL: string;
   buttonColor: string;
+  buttonTextColor: string;
 }
 
 const TicketPurchaseSuccessfulModal: React.FC<Props> = ({
   close,
   BASE_URL,
   buttonColor,
+  buttonTextColor,
 }) => {
   return (
     <div className="modal-body">
@@ -39,7 +41,10 @@ const TicketPurchaseSuccessfulModal: React.FC<Props> = ({
           rel="noopener noreferrer"
           className="sign-in-button"
         >
-          <div className="" style={{ background: buttonColor }}>
+          <div
+            className=""
+            style={{ background: buttonColor, color: buttonTextColor }}
+          >
             Sign in to Gruve
           </div>
         </a>

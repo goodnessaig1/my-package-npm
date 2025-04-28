@@ -1,6 +1,6 @@
 .schedule-wrapper {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   gap: 1rem;
 }
 
@@ -22,7 +22,7 @@
   text-align: center;
   font-size: 0.65rem;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   width: 40px;
   height: 40px;
@@ -55,10 +55,6 @@
 .schedule-time {
   font-size: 0.65rem;
   color: #575572;
-}
-
-.right-section {
-  display: none;
 }
 
 @media (min-width: 768px) {

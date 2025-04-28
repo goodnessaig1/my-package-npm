@@ -104,6 +104,7 @@ export default function WhatsAppInput({
             {countryCodes.map((country, idx) => (
               <div
                 key={idx}
+                className="list-items"
                 onClick={() => handleCountryChange(country.code)}
                 style={{
                   padding: "8px",

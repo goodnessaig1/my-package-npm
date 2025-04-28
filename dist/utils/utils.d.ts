@@ -16,4 +16,5 @@ export declare const createUserAnswerArray: (tickets: any[]) => any[];
 export declare function findTicketTypeIdWithHighestQuantity(tickets: any): null;
 export declare function applyDiscount(tickets: any[], ticketTypeId: number, count: number, eventCurrency: string, discountAmount: number, discountType: "AMOUNT" | "PERCENT", cost: Record<number, number>): [any[], number];
 export declare function updatedTickets(tickets: any[], eventDetails: any, coupons: any[]): any;
+export declare function isEarlyBirdActive(timestamp: string): boolean;
 export {};

@@ -178,6 +178,45 @@ export function applyDiscount(
   return [updatedTickets, discountAmountApplied];
 }
 
+// export function updatedTickets(
+//   tickets: any[],
+//   eventDetails: any,
+//   coupons: any[]
+// ) {
+//   if (eventDetails) {
+//     return eventDetails.map((detail: any, index: number) => {
+//       const ticket = tickets.find((t) => t.ticketName === detail.sectionName);
+
+//       const ticketTypeId = ticket ? ticket.ticketTypeId : index + 1;
+//       const coupon = coupons.find(
+//         (c) => c.ticketType === ticketTypeId && c.isEnabled
+//       );
+
+//       const originalCost = ticket?.cost ?? detail.cost;
+//       let discountedCost = originalCost;
+
+//       if (coupon) {
+//         if (coupon.discountType === "PERCENT") {
+//           discountedCost =
+//             originalCost - originalCost * (coupon.discountValue / 100);
+//         } else {
+//           discountedCost = Math.max(0, originalCost - coupon.discountValue);
+//         }
+//       }
+
+//       return {
+//         ...detail,
+//         ...(ticket || {}),
+//         quantity: detail?.quantity ?? 0,
+//         cost: originalCost,
+//         discountedCost,
+//         ticketName: ticket?.ticketName ?? detail.sectionName,
+//         ticketTypeId: ticketTypeId,
+//       };
+//     });
+//   }
+// }
+
 export function updatedTickets(
   tickets: any[],
   eventDetails: any,
@@ -195,13 +234,15 @@ export function updatedTickets(
       const originalCost = ticket?.cost ?? detail.cost;
       let discountedCost = originalCost;
 
-      if (coupon) {
+      if (coupon && isEarlyBirdActive(coupon.expireAt)) {
         if (coupon.discountType === "PERCENT") {
           discountedCost =
             originalCost - originalCost * (coupon.discountValue / 100);
         } else {
           discountedCost = Math.max(0, originalCost - coupon.discountValue);
         }
+      } else {
+        discountedCost = originalCost;
       }
 
       return {
@@ -215,4 +256,13 @@ export function updatedTickets(
       };
     });
   }
+}
+
+export function isEarlyBirdActive(timestamp: string) {
+  if (!timestamp) {
+    return false;
+  }
+
+  const currentTime = Date.now();
+  return currentTime <= Number(timestamp);
 }

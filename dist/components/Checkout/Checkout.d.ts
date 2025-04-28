@@ -20,6 +20,7 @@ interface CheckoutProps {
     coupons: any[];
     updatedTicketsData: ITicketListed[];
     buttonColor: string;
+    buttonTextColor: string;
     BACKEND_URL: string;
     BASE_URL: string;
 }

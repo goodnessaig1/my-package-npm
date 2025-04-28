@@ -5,6 +5,8 @@ declare module "echo-test-goody" {
     eventAddress: string;
     isTest?: boolean;
     config?: {
+      buttonText?: string;
+      buttonTextColor?: string;
       buttonColor: string;
     };
   }

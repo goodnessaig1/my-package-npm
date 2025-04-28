@@ -45,6 +45,7 @@ const Tickets: React.FC<TicketsProps> = ({
     setDropdownOpen(false);
     setCurrentCurrency(currency);
   };
+
   return (
     <div className="tickets-container">
       <div className="choose-ticket-box">
@@ -75,7 +76,7 @@ const Tickets: React.FC<TicketsProps> = ({
                 {supportedCurrency.map((currency, idx) => (
                   <div
                     key={idx}
-                    className="currency-list"
+                    className="list-items"
                     onClick={() => handleChange(currency)}
                     style={{
                       padding: "8px",

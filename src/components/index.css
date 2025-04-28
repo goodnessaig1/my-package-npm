@@ -8,8 +8,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  width: 120px;
-  padding: 8px 0px;
+  padding: 8px 20px !important;
   border-radius: 10px;
 }
 .event-details-btn:hover {

@@ -8,27 +8,30 @@ It handles event display, ticket purchase flows, and supports customization like
 ## 📦 Installation
 
 ```bash
-npm install gruve-event-widgets
+npm install echo
 ```
 
 #### or
 
 ```bash
-yarn add gruve-event-widgets
+yarn add echo
 ```
 
 ### 🚀 Usage
 
 ```
-import GruveEventWidgets from "gruve-event-widgets";
+import { GruveEventWidgets } from "echo";
 
 function App() {
   return (
     <div>
       <GruveEventWidgets
         eventAddress="your-event-address. eg:0x1508DfF27C5BfFC5810976fBCB3************"
-        themeColor="#3498db"
-        config={{ buttonColor: "#3498db" }}
+        config={{
+           buttonColor: "#3498db",
+            buttonText: "View event.....",
+            buttonTextColor: "white",
+        }}
        isTest={false} //default to false
       />
     </div>

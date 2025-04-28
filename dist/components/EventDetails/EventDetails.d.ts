@@ -15,6 +15,7 @@ interface EventDetailsProps {
     BACKEND_URL: string;
     BASE_URL: string;
     buttonColor: string;
+    buttonTextColor: string;
 }
 declare const EventDetails: React.FC<EventDetailsProps>;
 export default EventDetails;

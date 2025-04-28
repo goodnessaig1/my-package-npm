@@ -50,6 +50,7 @@ interface Props {
     totalPrice: number;
     errorMessage: string;
     buttonColor: string;
+    buttonTextColor: string;
     isSubmitting: boolean;
     openPaymentsModal: boolean;
     showApplyCoupon: boolean;

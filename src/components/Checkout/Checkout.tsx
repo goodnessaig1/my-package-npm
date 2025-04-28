@@ -33,6 +33,7 @@ interface CheckoutProps {
   coupons: any[];
   updatedTicketsData: ITicketListed[];
   buttonColor: string;
+  buttonTextColor: string;
   BACKEND_URL: string;
   BASE_URL: string;
 }
@@ -56,6 +57,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   BACKEND_URL,
   BASE_URL,
   buttonColor,
+  buttonTextColor,
 }) => {
   const [tickets, setTickets] = useState<ITicketListed[]>(listedTickets);
   const [isMultiple, setIsMultiple] = useState("yes");
@@ -472,6 +474,7 @@ const Checkout: React.FC<CheckoutProps> = ({
           coupon={coupon}
           couponError={couponError}
           buttonColor={buttonColor}
+          buttonTextColor={buttonTextColor}
           setCouponError={setCouponError}
           couponAppliedAmount={couponAppliedAmount}
         />

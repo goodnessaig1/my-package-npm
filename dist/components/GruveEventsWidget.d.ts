@@ -62,6 +62,8 @@ export interface GruveEventWidgetsProps {
     eventAddress: string;
     isTest?: boolean;
     config?: {
+        buttonText?: string;
+        buttonTextColor?: string;
         buttonColor: string;
     };
 }

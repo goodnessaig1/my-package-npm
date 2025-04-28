@@ -68,6 +68,8 @@ export interface GruveEventWidgetsProps {
   eventAddress: string;
   isTest?: boolean;
   config?: {
+    buttonText?: string;
+    buttonTextColor?: string;
     buttonColor: string;
   };
 }
@@ -86,7 +88,7 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   const [couponData, setCouponData] = useState<TicketDiscountList>([]);
 
   const BASE_URL = isTest
-    ? "http://localhost:3000"
+    ? "https://test.gruve.vercel.app"
     : "https://beta.gruve.events";
 
   const BACKEND_URL = isTest
@@ -160,16 +162,19 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   };
 
   const buttonColor = config?.buttonColor ? config?.buttonColor : "#ea445a";
-
+  const buttonText = config?.buttonText ? config?.buttonText : "Get ticket";
+  const buttonTextColor = config?.buttonTextColor
+    ? config.buttonTextColor
+    : "white";
   return (
     <div className="my-package-container">
-      <div
+      <button
         onClick={handleClick}
-        style={{ background: buttonColor }}
+        style={{ background: buttonColor, color: buttonTextColor }}
         className="event-details-btn"
       >
-        Get ticket
-      </div>
+        {buttonText}
+      </button>
       {loading ? (
         <div className="loader-container_">
           <Loader />
@@ -188,6 +193,7 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
           BACKEND_URL={BACKEND_URL}
           BASE_URL={BASE_URL}
           buttonColor={buttonColor}
+          buttonTextColor={buttonTextColor}
         />
       )}
     </div>
