@@ -40,7 +40,12 @@ export default {
   external: ["react", "react-dom"],
   plugins: [
     external(),
-    postcss(),
+    postcss({
+      modules: {
+        // This ensures the correct handling of CSS Modules
+        generateScopedName: "[name]__[local]___[hash:base64:5]",
+      },
+    }),
     resolve({ extensions }),
     commonjs(),
     typescript({

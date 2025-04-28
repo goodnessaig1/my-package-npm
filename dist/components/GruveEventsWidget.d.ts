@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.module.css";
+import "./index.css";
 import "../styles/global.module.css";
 export interface TagsOptions {
     value: string;

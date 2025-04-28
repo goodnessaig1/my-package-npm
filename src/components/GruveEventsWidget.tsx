@@ -5,7 +5,7 @@ import {
   QuestionList,
   TicketDiscountList,
 } from "../../types/echo-test-goody";
-import "./index.module.css";
+import "./index.css";
 import "../styles/global.module.css";
 import Loader from "./Loader/Loader";
 
