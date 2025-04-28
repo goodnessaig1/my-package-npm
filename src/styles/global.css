@@ -24,11 +24,11 @@ button {
 .my-package-container ol,
 .my-package-container li,
 .my-package-container button {
-  all: unset;
-  display: revert;
-  margin: 0;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  box-sizing: border-box;
+  all: unset !important;
+  display: revert !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font: inherit !important;
+  color: inherit !important;
+  box-sizing: border-box !important;
 }
