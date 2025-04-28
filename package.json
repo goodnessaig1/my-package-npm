@@ -1,6 +1,6 @@
 {
   "name": "echo-test-goody",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
