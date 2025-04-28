@@ -87,7 +87,7 @@ export default function WhatsAppInput({
         </div>
 
         {dropdownOpen && (
-          <ul
+          <div
             style={{
               position: "absolute",
               top: "100%",
@@ -102,7 +102,7 @@ export default function WhatsAppInput({
             }}
           >
             {countryCodes.map((country, idx) => (
-              <li
+              <div
                 key={idx}
                 onClick={() => handleCountryChange(country.code)}
                 style={{
@@ -116,9 +116,9 @@ export default function WhatsAppInput({
               >
                 <span>{country.country}</span>
                 <span>+{country.code}</span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
 
         <input

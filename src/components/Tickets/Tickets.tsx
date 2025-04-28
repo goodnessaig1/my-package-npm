@@ -59,22 +59,21 @@ const Tickets: React.FC<TicketsProps> = ({
               <SvgDropDown color="#111021" />
             </div>
             {dropdownOpen && (
-              <ul
+              <div
                 style={{
                   position: "absolute",
-                  top: "100%",
                   width: "60px",
                   backgroundColor: "#fff",
                   border: "1px solid #ccc",
                   zIndex: 9999,
                   overflowY: "auto",
                   borderRadius: "8px",
-                  marginTop: "32px",
+                  marginTop: "4px",
                   marginLeft: "4px",
                 }}
               >
                 {supportedCurrency.map((currency, idx) => (
-                  <li
+                  <div
                     key={idx}
                     className="currency-list"
                     onClick={() => handleChange(currency)}
@@ -88,9 +87,9 @@ const Tickets: React.FC<TicketsProps> = ({
                     }}
                   >
                     <span>{currency}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
         </div>

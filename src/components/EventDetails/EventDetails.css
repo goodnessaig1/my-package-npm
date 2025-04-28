@@ -152,7 +152,7 @@
 
 .not-selected {
   background: #e1e1e8;
-  color: gray;
+  color: rgb(193, 193, 193);
 }
 
 .not-selected:hover {
