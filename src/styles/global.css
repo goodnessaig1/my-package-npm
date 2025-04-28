@@ -31,4 +31,8 @@ button {
   font: inherit !important;
   color: inherit !important;
   box-sizing: border-box !important;
+
+  margin-block-start: 0px !important;
+  margin-block-end: 0px !important;
+  margin-inline-start: 0px;
 }
