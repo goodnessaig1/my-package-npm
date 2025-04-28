@@ -13,17 +13,17 @@ button {
   padding: 0px !important;
 }
 
-.my-package-container h1,
-.my-package-container h2,
-.my-package-container h3,
-.my-package-container h4,
-.my-package-container h5,
-.my-package-container h6,
-.my-package-container p,
-.my-package-container ul,
-.my-package-container ol,
-.my-package-container li,
-.my-package-container button {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+button {
   all: unset !important;
   display: revert !important;
   margin: 0 !important;
