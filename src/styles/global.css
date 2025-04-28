@@ -24,11 +24,6 @@ ul,
 ol,
 li,
 button {
-  display: revert !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  font: inherit !important;
-
   margin-block-start: 0px !important;
   margin-block-end: 0px !important;
   margin-inline-start: 0px;
