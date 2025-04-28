@@ -11,7 +11,7 @@
   font-size: 1.125rem;
   font-weight: 900;
   color: #2d3748;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.2rem !important;
 }
 
 .summary-row {

@@ -161,7 +161,6 @@ input[type="radio"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
