@@ -8,19 +8,19 @@ It handles event display, ticket purchase flows, and supports customization like
 ## 📦 Installation
 
 ```bash
-npm install echo
+npm install echo-test-goody
 ```
 
 #### or
 
 ```bash
-yarn add echo
+yarn add echo-test-goody
 ```
 
 ### 🚀 Usage
 
 ```
-import { GruveEventWidgets } from "echo";
+import { GruveEventWidgets } from "echo-test-goody";
 
 function App() {
   return (
@@ -57,6 +57,11 @@ buttonText | string | No | Text displayed inside the button. (default: "View Eve
 buttonTextColor | string | No | Color of the button text. (default: "white")
 
 ---
+
+| Prop Name    | Type   | Required | Description                                                             |
+| ------------ | ------ | -------- | ----------------------------------------------------------------------- |
+| eventAddress | string | ✅ Yes   | The unique eventAddress of the event you want to display.               |
+| config       | object | ❌ No    | Optional UI configuration for customizing the widget button appearance. |
 
 ## 📜 License
 
