@@ -8,3 +8,7 @@
   font-family: var(--font-primary);
   letter-spacing: 0;
 }
+
+button {
+  padding: 0px !important;
+}
