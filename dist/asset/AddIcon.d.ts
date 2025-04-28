@@ -1,2 +1,2 @@
-declare const AddIcon: () => import("react/jsx-runtime").JSX.Element;
+declare const AddIcon: (props: any) => import("react/jsx-runtime").JSX.Element;
 export default AddIcon;
