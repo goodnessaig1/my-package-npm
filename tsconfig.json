@@ -1,17 +1,30 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
+    // "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "module": "ESNext",
-    "target": "es2019",
+    // "module": "ESNext",
+    // "target": "es2019",
     "lib": ["dom", "es2019"],
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
+    // "moduleResolution": "Node",
+    // "esModuleInterop": true,
     "strict": true,
-    "declaration": true,
+    // "declaration": true,
     // "declarationDir": "dist",
     // "emitDeclarationOnly": true,
-    "outDir": "dist"
+    // "declarationDir": "./dist", // <== emit types into dist/
+    // "emitDeclarationOnly": true, // (optional, but clean if you only want .d.ts)
+    // "outDir": "./dist",
+    // "outDir": "dist"
+    "jsx": "react-jsx", // or "preserve"
+    "moduleResolution": "node",
+    "target": "es5",
+    "module": "esnext",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "outDir": "./dist"
   },
   "include": ["src", "types"]
 }

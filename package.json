@@ -5,7 +5,7 @@
   "module": "dist/index.es.js",
   "browser": "dist/index.umd.js",
   "umd:main": "dist/index.umd.js",
-  "types": "types/echo-test-goody.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",

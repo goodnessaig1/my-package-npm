@@ -50,7 +50,8 @@ export default {
     babel({
       extensions,
       babelHelpers: "bundled",
-      exclude: "node_modules/**",
+      // exclude: "node_modules/**",
+      exclude: ["node_modules/**", "**/*.ts", "**/*.tsx"],
     }),
     terser(),
   ],
