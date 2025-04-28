@@ -44,9 +44,19 @@ export default App;
 
 ### ⚙️ Props
 
-Prop Name Type Required Description
-eventAddress string ✅ Yes The unique address of the event you want to display.
-config object (hex code) ❌ No Primary color for theming the widget (e.g., #FF5733). Defaults if not set.
+Prop Name | Type | Required | Description
+eventAddress | string | ✅ Yes | The unique ID of the event you want to display.
+themeColor | string (hex code) | ❌ No | Primary color for theming the widget (e.g., #FF5733). Defaults if not set.
+config | object| ❌ No | Optional UI configuration for customizing the widget button appearance.
+
+### config _object properties:_
+
+Name | Type | Required | Description
+buttonColor | string | No | Background color of the button. (default: "blue")
+buttonText | string | No | Text displayed inside the button. (default: "View Event")
+buttonTextColor | string | No | Color of the button text. (default: "white")
+
+---
 
 ## 📜 License
 
