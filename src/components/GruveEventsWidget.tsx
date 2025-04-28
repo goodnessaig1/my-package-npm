@@ -162,7 +162,7 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   const buttonColor = config?.buttonColor ? config?.buttonColor : "#ea445a";
 
   return (
-    <div className="">
+    <div className="my-package-container">
       <div
         onClick={handleClick}
         style={{ background: buttonColor }}
