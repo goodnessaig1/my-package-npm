@@ -1,7 +1,16 @@
-export const PAYSTACK_KEY = "pk_test_b9c556369fc74860f7f267257c0f92c872792fd7";
-
 import { v4 as uuidv4 } from "uuid";
-import { SelectedTicket } from "../components/Tickets/TicketsCounter";
+import type { SelectedTicket } from "../components/Tickets/TicketsCounter";
+
+export const GET_PAYSTACK_KEY = (isTest: boolean) =>
+  isTest
+    ? "pk_test_b9c556369fc74860f7f267257c0f92c872792fd7"
+    : "pk_live_9ad4baa113f026b2507c13522e05fd2dda0e871c";
+
+export const GET_BASE_URL = (isTest: boolean) =>
+  isTest ? "https://test.gruve.vercel.app" : "https://beta.gruve.events";
+
+export const GET_BACKEND_URL = (isTest: boolean) =>
+  isTest ? "https://backend.gruve.events" : "https://secure.gruve.events";
 
 type TimeDiffResult = {
   day: number;
@@ -178,71 +187,21 @@ export function applyDiscount(
   return [updatedTickets, discountAmountApplied];
 }
 
-// export function updatedTickets(
-//   tickets: any[],
-//   eventDetails: any,
-//   coupons: any[]
-// ) {
-//   if (eventDetails) {
-//     return eventDetails.map((detail: any, index: number) => {
-//       const ticket = tickets.find((t) => t.ticketName === detail.sectionName);
-
-//       const ticketTypeId = ticket ? ticket.ticketTypeId : index + 1;
-//       const coupon = coupons.find(
-//         (c) => c.ticketType === ticketTypeId && c.isEnabled
-//       );
-
-//       const originalCost = ticket?.cost ?? detail.cost;
-//       let discountedCost = originalCost;
-
-//       if (coupon) {
-//         if (coupon.discountType === "PERCENT") {
-//           discountedCost =
-//             originalCost - originalCost * (coupon.discountValue / 100);
-//         } else {
-//           discountedCost = Math.max(0, originalCost - coupon.discountValue);
-//         }
-//       }
-
-//       return {
-//         ...detail,
-//         ...(ticket || {}),
-//         quantity: detail?.quantity ?? 0,
-//         cost: originalCost,
-//         discountedCost,
-//         ticketName: ticket?.ticketName ?? detail.sectionName,
-//         ticketTypeId: ticketTypeId,
-//       };
-//     });
-//   }
-// }
-
-export function updatedTickets(
-  tickets: any[],
-  eventDetails: any,
-  coupons: any[]
-) {
+export function updatedTickets(tickets: any[], eventDetails: any) {
   if (eventDetails) {
     return eventDetails.map((detail: any, index: number) => {
-      const ticket = tickets.find((t) => t.ticketName === detail.sectionName);
+      const ticket = tickets.find((t) => t.sectionName === detail.sectionName);
 
-      const ticketTypeId = ticket ? ticket.ticketTypeId : index + 1;
-      const coupon = coupons.find(
-        (c) => c.ticketType === ticketTypeId && c.isEnabled
-      );
-
+      const ticketTypeId = ticket ? ticket._ticketType : index + 1;
       const originalCost = ticket?.cost ?? detail.cost;
+
       let discountedCost = originalCost;
 
-      if (coupon && isEarlyBirdActive(coupon.expireAt)) {
-        if (coupon.discountType === "PERCENT") {
-          discountedCost =
-            originalCost - originalCost * (coupon.discountValue / 100);
-        } else {
-          discountedCost = Math.max(0, originalCost - coupon.discountValue);
-        }
-      } else {
-        discountedCost = originalCost;
+      if (detail?.earlyBird && isEarlyBirdActive(detail?.earlyBird)) {
+        discountedCost =
+          detail.discountedPrice !== undefined
+            ? detail.discountedPrice
+            : originalCost;
       }
 
       return {
@@ -251,18 +210,31 @@ export function updatedTickets(
         quantity: detail?.quantity ?? 0,
         cost: originalCost,
         discountedCost,
-        ticketName: ticket?.ticketName ?? detail.sectionName,
+        ticketName: ticket?.sectionName ?? detail.sectionName,
         ticketTypeId: ticketTypeId,
       };
     });
   }
 }
 
-export function isEarlyBirdActive(timestamp: string) {
-  if (!timestamp) {
-    return false;
-  }
+export function isEarlyBirdActive(earlyBird: {
+  endDate: string;
+  endTime: string;
+}) {
+  if (!earlyBird?.endDate || !earlyBird?.endTime) return false;
 
-  const currentTime = Date.now();
-  return currentTime <= Number(timestamp);
+  const endDate = new Date(earlyBird.endDate);
+
+  const [time, period] = earlyBird.endTime.split(" ");
+  const [hours, minutes] = time.split(":").map(Number);
+
+  let hours24 = hours;
+  if (period.toUpperCase() === "PM" && hours !== 12) hours24 += 12;
+  if (period.toUpperCase() === "AM" && hours === 12) hours24 = 0;
+
+  endDate.setUTCHours(hours24, minutes, 0, 0);
+
+  const now = new Date();
+
+  return now <= endDate;
 }

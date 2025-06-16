@@ -1,87 +1,116 @@
-# GruveEventWidgets
+# Gruve Event Widgets
 
-**GruveEventWidgets** is a React component that allows users to display and manage event ticket selections easily.  
-It handles event display, ticket purchase flows, and supports customization like theme color and ticket selection handling.
+GruveEventWidgets is a React component that lets you display and manage event ticket selections with minimal setup. It handles event display, ticket purchase flows, and supports custom styling and text via a single `config` prop.
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install echo-test-goody
+npm install @gruve/echo
 ```
 
-#### or
+or
 
 ```bash
-yarn add echo-test-goody
+yarn add @gruve/echo
 ```
 
-### 🚀 Usage
+---
 
-```
-import { GruveEventWidgets } from "echo-test-goody";
+## 🚀 Usage
+
+### 1. Render a styled button with custom text
+
+If you provide `config.displayText`, the component will render a button with that text. Any `children` passed will be ignored in this mode.
+
+```tsx
+import React from 'react'
+import { GruveEventWidgets } from "@gruve/echo"
 
 function App() {
   return (
     <div>
       <GruveEventWidgets
-        eventAddress="your-event-address. eg:0x1508DfF27C5BfFC5810976fBCB3************"
+        eventAddress="0x1508DfF27C5BfFC5810976fBCB3************"
+        isTest={true}
         config={{
-           buttonColor: "#3498db",
-            buttonText: "View event.....",
-            buttonTextColor: "white",
+          backgroundColor: "#3498db",
+          color: "white",
+          padding: "12px 24px",
+          borderRadius: "6px",
+          themeColor: "#e74c3c",
+          displayText: "View Event",
         }}
       />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+```
 
+### 2. Render custom children content
+
+If you omit `config.displayText`, the component will render whatever you pass as `children` instead of a default button.
+
+```tsx
+import React from 'react'
+import { GruveEventWidgets } from "@gruve/echo"
+
+function App() {
+  return (
+    <div>
+      <GruveEventWidgets
+        eventAddress="0x1508DfF27C5BfFC5810976fBCB3************"
+        config={{
+          backgroundColor: "#2ecc71",
+          themeColor: "#27ae60",
+        }}
+      >
+        <button style={{ padding: '8px 16px' }}>
+          Custom “Join Now” Button
+        </button>
+        <p style={{ marginTop: '8px' }}>Extra info or custom UI here.</p>
+      </GruveEventWidgets>
+    </div>
+  )
+}
+
+export default App
 ```
 
 ---
 
-<br>
-<br>
-<br>
-<br>
-<br>
+## ⚙️ Props
 
-### ⚙️ Props
+| Prop Name     | Type                                                                             | Required | Description                                                                                          |
+| ------------- | -------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `eventAddress`| `string`                                                                         | ✅ Yes   | The unique identifier (address) of the event you want to display.                                    |
+| `isTest`      | `boolean`                                                                        | No       | When `true`, runs the widget in test/sandbox mode (skips real payment flows).                        |
+| `config`      | `React.CSSProperties & { themeColor?: string; displayText?: string }`            | No       | Optional styling and text overrides. If you specify `displayText`, a button with that text is shown; otherwise, `children` are rendered. |
+| `children`    | `React.ReactNode`                                                                | No       | Custom nodes to render *only* when `config.displayText` is **not** provided.                         |
 
-| Prop Name    | Type   | Required | Description                                                             |
-| ------------ | ------ | -------- | ----------------------------------------------------------------------- |
-| eventAddress | string | ✅ Yes   | The unique eventAddress of the event you want to display.               |
-| config       | object | No       | Optional UI configuration for customizing the widget button appearance. |
+---
 
-<br>
-<br>
-<br>
+### 📐 `config` properties
 
-### config _object properties:_
+| Name            | Type       | Required | Description                                                                                  |
+| --------------- | ---------- | -------- | -------------------------------------------------------------------------------------------- |
+| CSS Properties  | `string` / `number` | No       | Any valid React CSS property (e.g., `backgroundColor`, `color`, `padding`, `borderRadius`).  |
+| `themeColor`    | `string`   | No       | A semantic theme color for internal use (e.g., hover states or progress bars).              |
+| `displayText`   | `string`   | No       | If provided, renders a button with this text. If omitted, the component will render its `children` instead. |
 
-| Name            | Type   | Required | Description                                                |
-| --------------- | ------ | -------- | ---------------------------------------------------------- |
-| buttonColor     | string | No       | Background color of the button. (default: "#ea445a")       |
-| buttonText      | string | No       | Text displayed inside the button. (default: "Get Tickets") |
-| buttonTextColor | string | No       | Color of the button text. (default: "white")               |
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+---
 
 ## 📜 License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License.  
 You are free to use, modify, and distribute this package for personal and commercial purposes.
 
 ---
 
-# 🤝 Contributions
+## 🤝 Contributions
 
-Contributions are welcome! Feel free to submit a pull request or open an issue if you encounter any bugs or want to add features.
+Contributions are welcome! Feel free to submit a pull request or open an issue if you encounter any bugs or want to add features.  
+```

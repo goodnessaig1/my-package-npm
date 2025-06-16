@@ -1,4 +1,4 @@
-.loader-container_ {
+._ {
   width: 100%;
   position: fixed;
   top: 0;
@@ -12,14 +12,14 @@
   z-index: 9999;
 }
 
-.loading-btn {
+.gruve-echo-loading-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
 
-.loader-container {
+.gruve-event-loader-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,7 +27,8 @@
   height: 100%;
   z-index: 10;
 }
-.loading-btn div {
+
+.gruve-echo-loading-btn div {
   border: 4px solid #ea445a;
   width: 24px;
   height: 24px;
@@ -36,7 +37,7 @@
   animation: spin 0.7s linear infinite;
 }
 
-.loader-spinner {
+.gruve-event-loader-spinner {
   width: 32px;
   height: 32px;
   border: 4px solid #3b82f6;
@@ -47,6 +48,27 @@
 
 @keyframes spin {
   to {
+    transform: rotate(360deg);
+  }
+}
+
+/* .loader { */
+.gruve-package-echo-home-loader {
+  width: 40px;
+  height: 40px;
+  border: 5px dotted #fff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
     transform: rotate(360deg);
   }
 }

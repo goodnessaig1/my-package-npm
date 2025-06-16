@@ -1,9 +1,4 @@
-.container-style {
-  background: #000;
-  color: white;
-}
-
-.event-details-btn {
+.gruve-event-details-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +6,7 @@
   padding: 8px 20px !important;
   border-radius: 10px;
 }
-.event-details-btn:hover {
+.gruve-event-details-btn:hover {
   background: #f690a2;
   cursor: pointer;
   transition: ease-in 300ms;

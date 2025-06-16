@@ -11,21 +11,21 @@ interface PaymentProps {
 const Payment: React.FC<PaymentProps> = ({ goBack }) => {
   return (
     <div>
-      <div className="modal-top">
-        <div className="back-arrow" onClick={goBack}>
+      <div className="gruve-echo-modal-top">
+        <div className="gruve-echo-back-arrow" onClick={goBack}>
           <BackArrow />
         </div>
         <h3>Payment</h3>
-        <div onClick={goBack} className="close-icon">
+        <div onClick={goBack} className="gruve-echo-close-icon">
           <CloseIcon />
         </div>
       </div>
-      <div className="input-box">
-        <div className="input-left">
+      <div className="gruve-echo-input-box">
+        <div className="gruve-echo-input-left">
           <input type="radio" defaultChecked={true} name="payment" />
           <span>Bank transfer, Debit Card</span>
         </div>
-        <div className="input-right">
+        <div className="gruve-echo-input-right">
           <SvgDollarIcon />
         </div>
       </div>

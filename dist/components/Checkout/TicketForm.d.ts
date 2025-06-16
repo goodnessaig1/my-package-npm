@@ -1,5 +1,5 @@
 import React from "react";
-import { IEventType } from "../../../types/echo-test-goody";
+import { IEventType } from "../../../types/echo";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
 interface Question {
     id: string;
@@ -25,7 +25,7 @@ export interface SubmittedTicket {
     cost: number;
     ticketName: string;
     quantity: number;
-    questions: {
+    answers: {
         id: string;
         answer: string;
         isRequired: string;

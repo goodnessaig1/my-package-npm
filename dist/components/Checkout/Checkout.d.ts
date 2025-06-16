@@ -1,7 +1,7 @@
 import React from "react";
 import "./Checkout.css";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
-import { IEventType, QuestionList } from "../../../types/echo-test-goody";
+import { IEventType, QuestionList } from "../../../types/echo";
 import { ITicketListed } from "./TicketForm";
 interface CheckoutProps {
     handleCloseModal: () => void;
@@ -15,14 +15,18 @@ interface CheckoutProps {
     rates: Record<string, number>;
     selectedTickets: SelectedTicket[];
     setShowTicketPurchaseSuccess: (val: boolean) => void;
+    setIsFree: (val: boolean) => void;
+    setOnSuccess: (val: boolean) => void;
     setListedTickets: React.Dispatch<React.SetStateAction<ITicketListed[]>>;
     setSelectedTickets: React.Dispatch<React.SetStateAction<SelectedTicket[]>>;
     coupons: any[];
     updatedTicketsData: ITicketListed[];
     buttonColor: string;
     buttonTextColor: string;
-    BACKEND_URL: string;
-    BASE_URL: string;
+    isTest: boolean;
+    setIsListening: any;
+    setOpenConfirmationModal: any;
+    setPaymentDetails: any;
 }
 declare const Checkout: React.FC<CheckoutProps>;
 export default Checkout;

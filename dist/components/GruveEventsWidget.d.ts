@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
 import "../styles/global.module.css";
+import "../components/Loader/loader.css";
 export interface TagsOptions {
     value: string;
     label: string;
@@ -22,6 +23,18 @@ export interface IEventInfo {
     _eventName: string;
     eventLink?: any;
 }
+type QuestionType = "text" | "email" | "website" | "phone" | "checkbox" | "terms" | "multiple" | "socials" | "single";
+export type IRegistrationQuestion = {
+    id: string;
+    title: string;
+    type: QuestionType;
+    required: boolean;
+    options?: any[];
+    termsContent?: string;
+    termsLink?: string;
+    socials?: string;
+    checkbox?: boolean;
+};
 export interface IEventData {
     timeZone: any;
     Attendee?: any;
@@ -46,6 +59,8 @@ export interface IEventData {
     }[];
     guests: any[];
     tickets: IITickets;
+    ticketingOption: string;
+    registrationQuestions: IRegistrationQuestion[];
 }
 export type IITickets = {
     _ticketType: string;
@@ -61,11 +76,11 @@ export type IITickets = {
 export interface GruveEventWidgetsProps {
     eventAddress: string;
     isTest?: boolean;
-    config?: {
-        buttonText?: string;
-        buttonTextColor?: string;
-        buttonColor: string;
+    config?: React.CSSProperties & {
+        themeColor?: string;
+        displayText?: string;
     };
+    children?: React.ReactNode;
 }
 declare const GruveEventWidgets: React.FC<GruveEventWidgetsProps>;
 export default GruveEventWidgets;

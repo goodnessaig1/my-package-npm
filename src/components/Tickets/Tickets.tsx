@@ -47,14 +47,14 @@ const Tickets: React.FC<TicketsProps> = ({
   };
 
   return (
-    <div className="tickets-container">
-      <div className="choose-ticket-box">
-        <div className="choose-ticket-header">
-          <p className="choose-ticket-title">Choose your ticket</p>
+    <div className="gruve-echo-tickets-container">
+      <div className="gruve-echo-choose-ticket-box">
+        <div className="choose-gruve-echo-ticket-header">
+          <p className="gruve-echo-choose-ticket-title">Choose your ticket</p>
           <div ref={dropdownRef} className="">
             <div
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="currency-select"
+              className="gruve-echo-currency-select"
             >
               <span>{currentCurrency}</span>
               <SvgDropDown color="#111021" />
@@ -76,7 +76,7 @@ const Tickets: React.FC<TicketsProps> = ({
                 {supportedCurrency.map((currency, idx) => (
                   <div
                     key={idx}
-                    className="list-items"
+                    className="gruve-echo-list-items"
                     onClick={() => handleChange(currency)}
                     style={{
                       padding: "8px",

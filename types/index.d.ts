@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 
-declare module "echo-test-goody" {
+declare module "echo" {
   export interface GruveEventWidgetsProps {
     eventAddress: string;
     isTest?: boolean;

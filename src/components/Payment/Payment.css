@@ -1,4 +1,4 @@
-.input-box {
+.gruve-echo-input-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -9,17 +9,17 @@
   background-color: white;
 }
 
-.input-left {
+.gruve-echo-input-left {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.input-left > input {
+.gruve-echo-input-left > input {
   width: 20px;
   accent-color: #ea445a;
 }
 
-.input-right .dollar-icon {
+.gruve-echo-input-right .gruve-echo-dollar-icon {
   width: 24px;
   height: 24px;
   border-radius: 50%;

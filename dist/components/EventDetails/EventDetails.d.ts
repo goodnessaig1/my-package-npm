@@ -1,7 +1,7 @@
 import "./EventDetails.css";
 import React from "react";
 import { IEventData } from "../GruveEventsWidget";
-import { IEventType, QuestionList, TicketDiscountList } from "../../../types/echo-test-goody";
+import { IEventType, QuestionList, TicketDiscountList } from "../../../types/echo";
 interface EventDetailsProps {
     eventDetails: IEventData | null;
     open: boolean;
@@ -12,8 +12,7 @@ interface EventDetailsProps {
     coupons: any[];
     ticketBalances: number[];
     couponData: TicketDiscountList;
-    BACKEND_URL: string;
-    BASE_URL: string;
+    isTest: boolean;
     buttonColor: string;
     buttonTextColor: string;
 }

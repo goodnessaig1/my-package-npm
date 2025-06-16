@@ -1,10 +1,10 @@
 import React from "react";
-import "./Loader.css";
+import "./loader.css";
 
 const Loader = () => {
   return (
-    <div className="loader-container">
-      <div className="loader-spinner"></div>
+    <div className="gruve-event-loader-container">
+      <div className="gruve-event-loader-spinner">.</div>
     </div>
   );
 };

@@ -18,12 +18,12 @@ function CustomInput({ max, value, onChange, ticket }: any) {
   };
 
   return (
-    <div className="counter-wrapper">
-      <button className="counter-btn" onClick={handleDecrement}>
+    <div className="gruve-echo-counter-wrapper">
+      <button className="gruve-echo-counter-btn" onClick={handleDecrement}>
         <MinusIcon />
       </button>
-      <span className="counter-value">{value}</span>
-      <button className="counter-btn" onClick={handleIncrement}>
+      <span className="gruve-echo-counter-value">{value}</span>
+      <button className="gruve-echo-counter-btn" onClick={handleIncrement}>
         <AddIcon />
       </button>
     </div>
@@ -132,7 +132,7 @@ export default function TicketCounter({
   };
 
   return (
-    <div className="ticket-counter-container">
+    <div className="gruve-echo-ticket-counter-container">
       {tickets.map((ticket: ITicket, index: number) => {
         const hasDiscount = ticket.cost !== ticket.discountedCost;
         const selectedTicket = selectedTickets.find(
@@ -140,46 +140,77 @@ export default function TicketCounter({
         );
 
         const selectedQuantity = selectedTicket?.quantity ?? 0;
-
+        const isSoldOut = ticketBalances[index] === 0;
         return (
-          <div className="ticket-row" key={index}>
-            <div className="ticket-top">
-              <div className="ticket-top-left">
-                <div className="ticket-name-holder">
-                  <h4 className="">{ticket.sectionName} </h4>
-                  {hasDiscount && <div className="early-bird">Early bird</div>}
-                </div>
-                <span className="">
-                  {ticket.cost === 0 ? (
-                    "Free"
-                  ) : (
-                    <>
-                      {hasDiscount ? (
-                        <div className="early-bird-prices">
-                          <h5>
-                            {currentCurrency === "USD" ? "$" : "₦"}
-                            {ticket?.discountedCost &&
-                            Object.keys(rates).length > 0 ? (
-                              <>
-                                {formatCurrency(
-                                  ticket.discountedCost *
-                                    (rates[
-                                      `${currentCurrency}${
-                                        eventDetails?.currency ?? "USD"
-                                      }`
-                                    ] ?? 1)
-                                )}
-                              </>
-                            ) : (
-                              <>
-                                {ticket?.discountedCost?.toLocaleString(
-                                  "en-NG"
-                                )}
-                              </>
-                            )}
-                          </h5>
-                          <span>
-                            {currentCurrency === "USD" ? "$" : "₦"}
+          <div
+            className={`gruve-echo-ticket-row ${
+              isSoldOut && "gruve-echo-sold-out-bg"
+            }`}
+            key={index}
+          >
+            {isSoldOut && (
+              <div className="sold-out-overlay">
+                <div className="sold-out-text">Sold Out</div>
+              </div>
+            )}
+            <div className={`ticket-content ${isSoldOut ? "blurred" : ""}`}>
+              <div className="gruve-echo-ticket-top">
+                <div className="gruve-echo-ticket-tp-left">
+                  <div className="gruve-echo-ticket-name-holder">
+                    <h4 className="">{ticket.sectionName} </h4>
+                    {hasDiscount && (
+                      <div className="gruve-echo-early-bird">Early bird</div>
+                    )}
+                  </div>
+                  <span className="">
+                    {ticket.cost === 0 ? (
+                      "Free"
+                    ) : (
+                      <>
+                        {hasDiscount ? (
+                          <div className="gruve-echo-early-bird-prices">
+                            <h5>
+                              {currentCurrency === "USD" ? "$" : "₦"}
+                              {ticket?.discountedCost &&
+                              Object.keys(rates).length > 0 ? (
+                                <>
+                                  {formatCurrency(
+                                    ticket.discountedCost *
+                                      (rates[
+                                        `${currentCurrency}${
+                                          eventDetails?.currency ?? "USD"
+                                        }`
+                                      ] ?? 1)
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  {ticket?.discountedCost?.toLocaleString(
+                                    "en-NG"
+                                  )}
+                                </>
+                              )}
+                            </h5>
+                            <span>
+                              {currentCurrency === "USD" ? "$" : "₦"}
+                              {ticket?.cost && Object.keys(rates).length > 0 ? (
+                                <>
+                                  {formatCurrency(
+                                    ticket.cost *
+                                      (rates[
+                                        `${currentCurrency}${
+                                          eventDetails?.currency ?? "USD"
+                                        }`
+                                      ] ?? 1)
+                                  )}
+                                </>
+                              ) : (
+                                <>{ticket?.cost?.toLocaleString("en-NG")}</>
+                              )}
+                            </span>
+                          </div>
+                        ) : (
+                          <>
                             {ticket?.cost && Object.keys(rates).length > 0 ? (
                               <>
                                 {formatCurrency(
@@ -192,43 +223,26 @@ export default function TicketCounter({
                                 )}
                               </>
                             ) : (
-                              <>{ticket?.cost?.toLocaleString("en-NG")}</>
+                              <>{ticket?.cost.toLocaleString("en-NG")}</>
                             )}
-                          </span>
-                        </div>
-                      ) : (
-                        <>
-                          {ticket?.cost && Object.keys(rates).length > 0 ? (
-                            <>
-                              {formatCurrency(
-                                ticket.cost *
-                                  (rates[
-                                    `${currentCurrency}${
-                                      eventDetails?.currency ?? "USD"
-                                    }`
-                                  ] ?? 1)
-                              )}
-                            </>
-                          ) : (
-                            <>{ticket?.cost.toLocaleString("en-NG")}</>
-                          )}
-                        </>
-                      )}
-                    </>
-                  )}
-                </span>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </span>
+                </div>
+                <CustomInput
+                  max={Math.min(ticket.quantity, ticketBalances[index])}
+                  value={selectedQuantity}
+                  onChange={(val: any) =>
+                    handleTicketQuantityChange(val, index, ticket)
+                  }
+                  ticket={ticket}
+                />
               </div>
-              <CustomInput
-                max={Math.min(ticket.quantity, ticketBalances[index])}
-                value={selectedQuantity}
-                onChange={(val: any) =>
-                  handleTicketQuantityChange(val, index, ticket)
-                }
-                ticket={ticket}
-              />
-            </div>
-            <div className="ticket-info">
-              <TruncatedText text={ticket?.description} />
+              <div className="gruve-echo-ticket-info">
+                <TruncatedText text={ticket?.description} />
+              </div>
             </div>
           </div>
         );

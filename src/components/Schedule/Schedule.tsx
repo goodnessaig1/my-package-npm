@@ -57,8 +57,8 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
     if (isSameDate && !hasMultipleTimes) {
       return (
         <div>
-          <div className="schedule-date">{formatDate(date)}</div>
-          <div className="schedule-time">
+          <div className="gruve-echo-schedule-date">{formatDate(date)}</div>
+          <div className="gruve-echo-schedule-time">
             {convertedTimeSlots[0].startTime} - {convertedTimeSlots[0].endTime}{" "}
             {!Number.isNaN(timeZoneOffset ?? 0) &&
               `GMT ${timeZoneOffset > 0 ? "-" : "+"}${
@@ -72,7 +72,7 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
     if (isSameDate && hasMultipleTimes) {
       return (
         <div>
-          <div className="schedule-time">
+          <div className="gruve-echo-schedule-time">
             {convertedTimeSlots.map((time: any, index: number) => (
               <span key={index}>
                 {time.startTime} - {time.endTime}
@@ -80,7 +80,7 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
               </span>
             ))}
           </div>
-          <div className="schedule-time">
+          <div className="gruve-echo-schedule-time">
             {!Number.isNaN(timeZoneOffset ?? 0) &&
               `GMT ${timeZoneOffset > 0 ? "-" : "+"}${
                 Math.abs(timeZoneOffset / 60) || 0
@@ -93,10 +93,10 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
     if (!isSameDate) {
       return (
         <div>
-          <div className="schedule-date">
+          <div className="gruve-echo-schedule-date">
             {formatDate(date)} - {formatDate(endDate)}
           </div>
-          <div className="schedule-time">
+          <div className="gruve-echo-schedule-time">
             {convertedTimeSlots.map((time: any, index: number) => (
               <span key={index}>
                 {time.startTime} - {time.endTime}
@@ -124,7 +124,7 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
     const endYear = new Date(endDate).getFullYear();
 
     return (
-      <div className="month-box">
+      <div className="gruve-echo-month-box">
         {startMonth !== endMonth || startYear !== endYear
           ? `${startMonth} - ${endMonth}`
           : startMonth}
@@ -143,23 +143,23 @@ const ScheduleInfo = ({ eventData }: { eventData: IEventData }) => {
     const endDay = formatDayUTC(endDate);
 
     return (
-      <div className="day-box">
+      <div className="gruve-echo-day-box">
         {startDay !== endDay ? `${startDay} - ${endDay}` : startDay}
       </div>
     );
   };
 
   return (
-    <div className="schedule-wrapper">
-      <div className="left-section">
-        <div className="date-box">
+    <div className="gruve-echo-schedule-wrapper">
+      <div className="gruve-echo-left-section">
+        <div className="gruve-echo-date-box">
           {getMonth()}
           {getDay()}
         </div>
         <div className="schedule-details">{renderSchedule()}</div>
       </div>
 
-      <div className="right-section">
+      <div className="gruve-echo-right-section">
         <CountDown date={`${date} ${eventData.schedules[0].startTime}`} />
       </div>
     </div>

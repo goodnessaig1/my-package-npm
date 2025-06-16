@@ -14,19 +14,19 @@ const Location = ({ location }: { location: any }) => {
 
   return (
     <div className="">
-      <div className="location-container">
-        <div className="location-icon-box">
+      <div className="gruve-echo-location-container">
+        <div className="gruve-echo-location-icon-box">
           <LocationIcon width="1rem" height="1rem" />
         </div>
 
         {isOnline ? (
-          <p className="location-link">
+          <p className="gruve-echo-location-link">
             <a href={locationUrl} target="_blank" rel="noopener noreferrer">
               Online
             </a>
           </p>
         ) : (
-          <p className="location-text">{displayLocation}</p>
+          <p className="gruve-echo-location-text">{displayLocation}</p>
         )}
       </div>
     </div>

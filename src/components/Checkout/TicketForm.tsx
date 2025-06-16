@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import DeleteIcon from "../../asset/DeleteIcon";
 import { v4 as uuidv4 } from "uuid";
-import { IEventType } from "../../../types/echo-test-goody";
+import { IEventType } from "../../../types/echo";
 import OrderSummary from "../Payment/OrderSummary";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
 import BackArrow from "../../asset/BackArrow";
@@ -41,7 +41,7 @@ export interface SubmittedTicket {
   cost: number;
   ticketName: string;
   quantity: number;
-  questions: { id: string; answer: string; isRequired: string }[];
+  answers: { id: string; answer: string; isRequired: string }[];
   ticketTypeId: number;
 }
 
@@ -130,7 +130,7 @@ const TicketForm: React.FC<Props> = ({
       if (!entry.fullName || !entry.email) {
         return "Please fill all user details.";
       }
-      for (let q of entry.questions) {
+      for (let q of entry.answers) {
         if (q.isRequired === "True" && (!q.answer || q.answer.trim() === "")) {
           return "Please answer all required questions.";
         }
@@ -211,31 +211,35 @@ const TicketForm: React.FC<Props> = ({
         if (isMultiple === "no") {
           const answers =
             uniqueQuestions.map((q) => ({
-              id: q.id,
+              questionId: q.id,
               answer: values[`quickQuestion_${q.id}`] || "",
               isRequired: q.isRequired,
+              question: q?.question,
             })) || [];
 
           data = tickets.map((ticket) => ({
             id: ticket?.id ? ticket?.id : uuidv4().replace("-", ""),
             fullName: values.fullName,
             email: values.email,
-            whatsAppNumber: values.whatsAppNumber,
+            ...(values?.whatsAppNumber && {
+              whatsAppNumber: values.whatsAppNumber,
+            }),
             cost: ticket?.cost,
             quantity: ticket?.quantity,
             ticketName: ticket?.ticketName,
             ticketTypeId: ticket.ticketTypeId,
-            questions: answers.filter((a) =>
-              ticket.requiredQuestion?.some((rq) => rq.id === a.id)
+            answers: answers.filter((a) =>
+              ticket.requiredQuestion?.some((rq) => rq.id === a.questionId)
             ),
           }));
         } else {
           data = tickets.map((ticket, index) => {
-            const questions =
+            const answers =
               ticket.requiredQuestion?.map((q) => ({
-                id: q.id,
                 answer: values[`question_${index}_${q.id}`] || "",
                 isRequired: q.isRequired,
+                question: q.question,
+                questionId: q.id,
               })) || [];
 
             return {
@@ -246,8 +250,10 @@ const TicketForm: React.FC<Props> = ({
               ticketName: ticket?.ticketName,
               ticketTypeId: ticket.ticketTypeId,
               email: values[`email_${index}`],
-              whatsAppNumber: values[`whatsAppNumber_${index}`],
-              questions,
+              ...(values[`whatsAppNumber_${index}`] && {
+                whatsAppNumber: values[`whatsAppNumber_${index}`],
+              }),
+              answers,
             };
           });
         }
@@ -269,248 +275,280 @@ const TicketForm: React.FC<Props> = ({
               </div>
             ) : (
               <div className="">
-                <div className="modal-top">
-                  <div className="back-arrow" onClick={goBack}>
+                <div className="gruve-echo-modal-top">
+                  <div className="gruve-echo-back-arrow" onClick={goBack}>
                     <BackArrow />
                   </div>
                   <h3>Checkout</h3>
-                  <div onClick={handleCloseModal} className="close-icon">
+                  <div
+                    onClick={handleCloseModal}
+                    className="gruve-echo-close-icon"
+                  >
                     <CloseIcon />
                   </div>
                 </div>
-                <div className="form-group form-gr-t">
-                  <label>Send tickets separately?</label>
-                  <span>
-                    Tickets will be emailed separately to each attendee based on
-                    the quantity purchased.
-                  </span>
+                {tickets && tickets.length > 1 && (
+                  <div className="gruve-echo-form-group gruve-echo-form-gr-t">
+                    <label>Send tickets separately?</label>
+                    <span>
+                      Tickets will be emailed separately to each attendee based
+                      on the quantity purchased.
+                    </span>
 
-                  <div className="radio-options">
-                    <label>
-                      <Field
-                        type="radio"
-                        name="is_multiple"
-                        value="yes"
-                        className="custom-radio"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setIsMultiple(e.target.value);
-                        }}
-                      />
-                      <span>Yes</span>
-                    </label>
-                    <label>
-                      <Field
-                        type="radio"
-                        name="is_multiple"
-                        value="no"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          setIsMultiple(e.target.value);
-                        }}
-                        className="custom-radio"
-                      />
-                      <span>No</span>
-                    </label>
+                    <div className="gruve-echo-radio-options">
+                      <label>
+                        <Field
+                          type="radio"
+                          name="is_multiple"
+                          value="yes"
+                          className="custom-radio"
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            setIsMultiple(e.target.value);
+                          }}
+                        />
+                        <span>Yes</span>
+                      </label>
+                      <label>
+                        <Field
+                          type="radio"
+                          name="is_multiple"
+                          value="no"
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            setIsMultiple(e.target.value);
+                          }}
+                          className="custom-radio"
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
                   </div>
-                </div>
+                )}
                 {isMultiple === "no" && (
                   <div
-                    className="form-group ticket-section"
                     style={{
-                      border: "1px solid #ccc",
-                      padding: "10px",
-                      marginBottom: "10px",
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                   >
-                    <div className="form-items">
-                      <div className="form-cont">
-                        <label htmlFor="fullName">Receiver's Full Name</label>
-                        <Field name="fullName" placeholder="Full Name" />
+                    <div
+                      className="gruve-echo-form-group gruve-echo-ticket-section"
+                      style={{
+                        border: "1px solid #ccc",
+                        padding: "10px",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div className="gruve-echo-form-items">
+                        <div className="gruve-echo-form-cont">
+                          <label htmlFor="fullName">Receiver's Full Name</label>
+                          <Field name="fullName" placeholder="Full Name" />
+                        </div>
+                        <div className="gruve-echo-form-cont">
+                          <label htmlFor="email">Receiver's Email</label>
+                          <Field name="email" placeholder="Email" />
+                        </div>
+                        <WhatsAppInput
+                          index={null}
+                          fieldName={`whatsAppNumber`}
+                        />
                       </div>
-                      <div className="form-cont">
-                        <label htmlFor="email">Receiver's Email</label>
-                        <Field name="email" placeholder="Email" />
-                      </div>
-                      <WhatsAppInput
-                        index={null}
-                        fieldName={`whatsAppNumber`}
-                      />
-                    </div>
 
-                    {uniqueQuestions && uniqueQuestions?.length > 0 && (
-                      <div className="questions-container">
-                        <h3 className="">Quick Questions</h3>
-                        <div className="questionss">
-                          {uniqueQuestions.map((q, i) => (
-                            <div className="question-card" key={q.id + i}>
-                              <label>
-                                {q.question}
-                                {q?.isRequired === "True" && (
-                                  <span className="">*</span>
-                                )}
-                              </label>
+                      {uniqueQuestions && uniqueQuestions?.length > 0 && (
+                        <div className="gruve-echo-questions-container">
+                          <h3 className="">Quick Questions</h3>
+                          <div className="gruve-echo-questionss">
+                            {uniqueQuestions.map((q, i) => (
+                              <div
+                                className="gruve-echo-question-card"
+                                key={q.id + i}
+                              >
+                                <label>
+                                  {q.question}
+                                  {q?.isRequired === "True" && (
+                                    <span className="">*</span>
+                                  )}
+                                </label>
+                                <Field
+                                  name={`quickQuestion_${q.id}`}
+                                  placeholder="Answer here"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    {errorMessage && (
+                      <div className="gruve-echo-error-msg">{errorMessage}</div>
+                    )}
+                  </div>
+                )}
+                {isMultiple === "yes" && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {tickets.map((ticket, index) => {
+                      const group = groupedTicketInfo[ticket.ticketName];
+                      const isFirstOfType =
+                        group?.firstIndex === index && group?.count > 1;
+                      return (
+                        <div
+                          key={
+                            ticket.id
+                              ? `${ticket.id}-${index}`
+                              : `ticket-${index}`
+                          }
+                          className="gruve-echo-ticket-section"
+                          style={{
+                            border: "1px solid #ccc",
+                            padding: "10px",
+                            marginBottom: "10px",
+                          }}
+                        >
+                          <div className="gruve-echo-form-items">
+                            <div className="gruve-echo-ticket-header">
+                              <strong>
+                                {ticket.ticketName} {index + 1}
+                              </strong>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  handleDeleteTicket(index);
+                                  setFieldValue(`fullName_${index}`, "");
+                                  setFieldValue(`email_${index}`, "");
+                                  setFieldValue(`whatsAppNumber_${index}`, "");
+                                }}
+                                className="gruve-echo-delete-btn"
+                              >
+                                <DeleteIcon />
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                            <div className="gruve-echo-form-cont">
+                              <label>Owners Fullname</label>
                               <Field
-                                name={`quickQuestion_${q.id}`}
-                                placeholder="Answer here"
+                                name={`fullName_${index}`}
+                                placeholder="Full Name"
                               />
                             </div>
-                          ))}
+                            <div className="gruve-echo-form-cont">
+                              <label>Email</label>
+                              <Field
+                                name={`email_${index}`}
+                                placeholder="Email"
+                              />
+                            </div>
+                            <WhatsAppInput
+                              index={index}
+                              fieldName={`whatsAppNumber_${index}`}
+                            />
+                          </div>
+
+                          {ticket?.requiredQuestion?.length > 0 && (
+                            <div className="gruve-echo-questions-container">
+                              <h3 className="">Quick Questions</h3>
+                              <div className="gruve-echo-questionss">
+                                {ticket.requiredQuestion.map(
+                                  (question, qIndex) => {
+                                    const fieldName = `question_${index}_${question.id}`;
+                                    const answerValue = values[fieldName];
+                                    return (
+                                      <div
+                                        className="gruve-echo-question-card"
+                                        key={question.id + qIndex}
+                                      >
+                                        <label>
+                                          {question.question}
+                                          {question.isRequired === "True" && (
+                                            <span>*</span>
+                                          )}
+                                        </label>
+                                        <Field
+                                          name={fieldName}
+                                          placeholder="Answer here"
+                                        />
+
+                                        {isFirstOfType && (
+                                          <div
+                                            className="gruve-echo-toggle-wrapper"
+                                            style={{ marginTop: "8px" }}
+                                          >
+                                            <Tooltip
+                                              text="Please provide an answer first"
+                                              show={!answerValue}
+                                              position="top"
+                                            >
+                                              <label className="gruve-echo-toggle-switch">
+                                                <input
+                                                  type="checkbox"
+                                                  checked={
+                                                    !!appliedToggles[
+                                                      question.id
+                                                    ]
+                                                  }
+                                                  onChange={() => {
+                                                    answerValue &&
+                                                      handleToggle(
+                                                        question.id,
+                                                        answerValue,
+                                                        setFieldValue
+                                                      );
+                                                  }}
+                                                />
+                                                <span className="gruve-echo-slider">
+                                                  <span className="gruve-echo-knob">
+                                                    <span
+                                                      className={`gruve-echo-icon-wrapper`}
+                                                    >
+                                                      {!!appliedToggles[
+                                                        question.id
+                                                      ] ? (
+                                                        <ToggleSwitchOn
+                                                          width="1rem"
+                                                          height=".8rem"
+                                                        />
+                                                      ) : (
+                                                        <CancelIcon />
+                                                      )}
+                                                    </span>
+                                                  </span>
+                                                </span>
+                                              </label>
+                                            </Tooltip>
+                                            <span>
+                                              Apply answer to all ticket
+                                              questions
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                )}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        {errorMessage && (
-                          <div className="error-msg">{errorMessage}</div>
-                        )}
+                      );
+                    })}
+                    {errorMessage && (
+                      <div className="error">
+                        <div className="gruve-echo-error-msg">
+                          {errorMessage}
+                        </div>
                       </div>
                     )}
                   </div>
                 )}
-                {isMultiple === "yes" &&
-                  tickets.map((ticket, index) => {
-                    const group = groupedTicketInfo[ticket.ticketName];
-                    const isFirstOfType =
-                      group?.firstIndex === index && group?.count > 1;
-                    return (
-                      <div
-                        key={
-                          ticket.id
-                            ? `${ticket.id}-${index}`
-                            : `ticket-${index}`
-                        }
-                        className="ticket-section"
-                        style={{
-                          border: "1px solid #ccc",
-                          padding: "10px",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        <div className="form-items">
-                          <div className="ticket-header">
-                            <strong>
-                              {ticket.ticketName} {index + 1}
-                            </strong>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                handleDeleteTicket(index);
-                                setFieldValue(`fullName_${index}`, "");
-                                setFieldValue(`email_${index}`, "");
-                                setFieldValue(`whatsAppNumber_${index}`, "");
-                              }}
-                              className="delete-btn"
-                            >
-                              <DeleteIcon />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                          <div className="form-cont">
-                            <label>Owners Fullname</label>
-                            <Field
-                              name={`fullName_${index}`}
-                              placeholder="Full Name"
-                            />
-                          </div>
-                          <div className="form-cont">
-                            <label>Email</label>
-                            <Field
-                              name={`email_${index}`}
-                              placeholder="Email"
-                            />
-                          </div>
-                          <WhatsAppInput
-                            index={index}
-                            fieldName={`whatsAppNumber_${index}`}
-                          />
-                        </div>
-
-                        {ticket?.requiredQuestion?.length > 0 && (
-                          <div className="questions-container">
-                            <h3 className="">Quick Questions</h3>
-                            <div className="questionss">
-                              {ticket.requiredQuestion.map(
-                                (question, qIndex) => {
-                                  const fieldName = `question_${index}_${question.id}`;
-                                  const answerValue = values[fieldName];
-                                  return (
-                                    <div
-                                      className="question-card"
-                                      key={question.id + qIndex}
-                                    >
-                                      <label>
-                                        {question.question}
-                                        {question.isRequired === "True" && (
-                                          <span>*</span>
-                                        )}
-                                      </label>
-                                      <Field
-                                        name={fieldName}
-                                        placeholder="Answer here"
-                                      />
-
-                                      {isFirstOfType && (
-                                        <div
-                                          className="toggle-wrapper"
-                                          style={{ marginTop: "8px" }}
-                                        >
-                                          <Tooltip
-                                            text="Please provide an answer first"
-                                            show={!answerValue}
-                                            position="top"
-                                          >
-                                            <label className="toggle-switch">
-                                              <input
-                                                type="checkbox"
-                                                checked={
-                                                  !!appliedToggles[question.id]
-                                                }
-                                                onChange={() => {
-                                                  answerValue &&
-                                                    handleToggle(
-                                                      question.id,
-                                                      answerValue,
-                                                      setFieldValue
-                                                    );
-                                                }}
-                                              />
-                                              <span className="slider">
-                                                <span className="knob">
-                                                  <span
-                                                    className={`icon-wrapper`}
-                                                  >
-                                                    {!!appliedToggles[
-                                                      question.id
-                                                    ] ? (
-                                                      <ToggleSwitchOn
-                                                        width="1rem"
-                                                        height=".8rem"
-                                                      />
-                                                    ) : (
-                                                      <CancelIcon />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              </span>
-                                            </label>
-                                          </Tooltip>
-                                          <span>
-                                            Apply answer to all ticket questions
-                                          </span>
-                                        </div>
-                                      )}
-                                    </div>
-                                  );
-                                }
-                              )}
-                            </div>
-                            {errorMessage && (
-                              <div className="error">
-                                <div className="error-msg">{errorMessage}</div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                <div className="coupon-container">
-                  <div className="coupon-top">
+                <div className="gruve-echo-coupon-container">
+                  <div className="gruve-echo-coupon-top">
                     <h3>
                       Coupon Code <span className="">(Optional)</span>
                     </h3>
@@ -521,7 +559,7 @@ const TicketForm: React.FC<Props> = ({
                       flexDirection: "column",
                     }}
                   >
-                    <div className="coupon-input">
+                    <div className="gruve-echo-coupon-input">
                       <Field
                         id="coupon"
                         name="coupon"
@@ -542,11 +580,13 @@ const TicketForm: React.FC<Props> = ({
                             );
                           }
                         }}
-                        className={`apply ${!discountCode && "disable"}`}
+                        className={`apply ${
+                          !discountCode && "gruve-echo-disable"
+                        }`}
                       >
                         {showApplyCoupon ? (
-                          <div className="loading-btn">
-                            <div className="loader-spinner"></div>
+                          <div className="gruve-echo-loading-btn">
+                            <div className="gruve-event-loader-spinner"></div>
                           </div>
                         ) : (
                           <>Apply</>
@@ -555,7 +595,9 @@ const TicketForm: React.FC<Props> = ({
                     </div>
                     {couponError && (
                       <div className="error">
-                        <div className="error-msg">{couponError}</div>
+                        <div className="gruve-echo-error-msg">
+                          {couponError}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -577,13 +619,16 @@ const TicketForm: React.FC<Props> = ({
           )}
 
           {openPaymentsModal ? (
-            <div className="ctn-container">
-              <div onClick={handleClosePayment} className="go-back-btn">
+            <div className="gruve-echo-ctn-container">
+              <div
+                onClick={handleClosePayment}
+                className="gruve-echo-go-back-btn"
+              >
                 Back
               </div>
               {isSubmitting ? (
-                <div className="loading-btn">
-                  <div className="loader-spinner"></div>
+                <div className="gruve-echo-loading-btn gruve-event-loader-container-order">
+                  <div className="gruve-event-loader-spinner"></div>
                 </div>
               ) : (
                 <button
@@ -599,26 +644,26 @@ const TicketForm: React.FC<Props> = ({
                     })
                   }
                   style={{ background: buttonColor, color: buttonTextColor }}
-                  className="submit-btn"
+                  className="gruve-echo-submit-btn"
                 >
                   Finalize payment
                 </button>
               )}
             </div>
           ) : (
-            <div className="ctn-container">
-              <div onClick={goBack} className="go-back-btn">
+            <div className="gruve-echo-ctn-container">
+              <div onClick={goBack} className="gruve-echo-go-back-btn">
                 Back
               </div>
               {isSubmitting ? (
-                <div className="loading-btn">
-                  <div className="loader-spinner"></div>
+                <div className="gruve-echo-loading-btn gruve-event-loader-container-order">
+                  <div className="gruve-event-loader-spinner"></div>
                 </div>
               ) : (
                 <button
                   style={{ background: buttonColor, color: buttonTextColor }}
                   type="submit"
-                  className="submit-btn"
+                  className="gruve-echo-submit-btn"
                 >
                   Proceed to Payment
                 </button>

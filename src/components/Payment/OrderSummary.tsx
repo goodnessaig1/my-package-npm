@@ -33,15 +33,18 @@ const OrderSummary: React.FC<Props> = ({
   defaultCurrency,
 }) => {
   return (
-    <div className="order-summary">
-      <h2 className="order-summary-title">Order Summary</h2>
+    <div className="gruve-echo-order-summary">
+      <h2 className="gruve-echo-order-summary-title">Order Summary</h2>
 
       {ticketsArray &&
         ticketsArray?.map((ticket, index) => {
           const hasDiscount = ticket.cost !== ticket.discountedCost;
           const ticketCost = hasDiscount ? ticket.discountedCost : ticket.cost;
           return (
-            <div className="summary-row" key={`ticketsArray-summary-${index}`}>
+            <div
+              className="gruve-echo-summary-row"
+              key={`ticketsArray-summary-${index}`}
+            >
               <span>
                 {ticket.quantity} {ticket.ticketName}
               </span>
@@ -66,7 +69,7 @@ const OrderSummary: React.FC<Props> = ({
 
       <hr className="divider" />
 
-      <div className="summary-row">
+      <div className="gruve-echo-summary-row">
         <span>Subtotal</span>
 
         <span>
@@ -83,10 +86,10 @@ const OrderSummary: React.FC<Props> = ({
 
       {couponAppliedAmount > 0 && (
         <>
-          <div className="summary-row">
+          <div className="gruve-echo-summary-row">
             <span>Discount</span>
 
-            <span className="discount">
+            <span className="gruve-echo-discount">
               -
               {`${currentCurrency === "USD" ? "$" : "₦"}${
                 formatCurrency(
@@ -101,7 +104,7 @@ const OrderSummary: React.FC<Props> = ({
         </>
       )}
 
-      <div className="summary-row total">
+      <div className="gruve-echo-summary-row total">
         <span>Total</span>
         <span>
           {currentCurrency === "USD" ? "$" : "₦"}

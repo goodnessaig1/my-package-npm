@@ -3,9 +3,9 @@ import "./Tooltip.css";
 
 const Tooltip = ({ children, text, show, position = "top" }: any) => {
   return (
-    <div className={`tooltip-container ${position}`}>
+    <div className={`gruve-echo-tooltip-container ${position}`}>
       {children}
-      {show && <span className="tooltip-text">{text}</span>}
+      {show && <span className="gruve-echo-tooltip-text">{text}</span>}
     </div>
   );
 };

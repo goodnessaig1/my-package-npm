@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Checkout.css";
 import { SelectedTicket } from "../Tickets/TicketsCounter";
-import { IEventType, QuestionList } from "../../../types/echo-test-goody";
+import { IEventType, QuestionList } from "../../../types/echo";
 import TicketForm, {
   HandlePurchaseEventParams,
   ITicketListed,
@@ -11,7 +11,10 @@ import {
   applyDiscount,
   createUserAnswerArray,
   findTicketTypeIdWithHighestQuantity,
-  PAYSTACK_KEY,
+  GET_BACKEND_URL,
+  GET_BASE_URL,
+  GET_PAYSTACK_KEY,
+  isEarlyBirdActive,
   randomizeLastFourDigits,
 } from "../../utils/utils";
 import paystackModal from "@paystack/inline-js";
@@ -28,14 +31,18 @@ interface CheckoutProps {
   rates: Record<string, number>;
   selectedTickets: SelectedTicket[];
   setShowTicketPurchaseSuccess: (val: boolean) => void;
+  setIsFree: (val: boolean) => void;
+  setOnSuccess: (val: boolean) => void;
   setListedTickets: React.Dispatch<React.SetStateAction<ITicketListed[]>>;
   setSelectedTickets: React.Dispatch<React.SetStateAction<SelectedTicket[]>>;
   coupons: any[];
   updatedTicketsData: ITicketListed[];
   buttonColor: string;
   buttonTextColor: string;
-  BACKEND_URL: string;
-  BASE_URL: string;
+  isTest: boolean;
+  setIsListening: any;
+  setOpenConfirmationModal: any;
+  setPaymentDetails: any;
 }
 
 const Checkout: React.FC<CheckoutProps> = ({
@@ -54,14 +61,17 @@ const Checkout: React.FC<CheckoutProps> = ({
   openPaymentsModal,
   coupons,
   updatedTicketsData,
-  BACKEND_URL,
-  BASE_URL,
+  isTest,
   buttonColor,
   buttonTextColor,
+  setIsListening,
+  setOpenConfirmationModal,
+  setPaymentDetails,
+  setIsFree,
+  setOnSuccess,
 }) => {
   const [tickets, setTickets] = useState<ITicketListed[]>(listedTickets);
   const [isMultiple, setIsMultiple] = useState("yes");
-  const [userAnswerArray, setUserAnswerArray] = useState<any>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -121,7 +131,6 @@ const Checkout: React.FC<CheckoutProps> = ({
     eventAddress,
     email,
     tickets,
-    userAnswerArray = [],
   }: HandlePurchaseEventParams): Promise<void> => {
     const data = {
       address: walletAddress,
@@ -134,8 +143,13 @@ const Checkout: React.FC<CheckoutProps> = ({
     };
 
     setIsSubmitting(true);
+    setTimeout(() => {
+      setIsFree(true);
+      setIsListening(true);
+      setOpenConfirmationModal(true);
+    }, 2000);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/add_free_event`, {
+      const res = await fetch(`${GET_BACKEND_URL(isTest)}/api/add_free_event`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,8 +158,10 @@ const Checkout: React.FC<CheckoutProps> = ({
       });
 
       if (res.ok) {
+        const result = await res.json();
+        setOnSuccess(true);
+        setPaymentDetails(result);
         setShowTicketPurchaseSuccess(true);
-        await submitUserAnswers(userAnswerArray);
       }
     } catch (e: any) {
       setIsSubmitting(false);
@@ -155,36 +171,12 @@ const Checkout: React.FC<CheckoutProps> = ({
     }
   };
 
-  const submitUserAnswers = async (userAnswerArray: any[]) => {
-    if (!Array.isArray(userAnswerArray) || userAnswerArray.length === 0) return;
-
-    try {
-      const response = await fetch(`${BASE_URL}/api/questions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userAnswerArray }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to submit answers: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error("Error submitting user answers:", error);
-    }
-  };
-
   const handleSubmit = async (data: SubmittedTicket[]): Promise<void> => {
     let totalPrice = 0;
     data?.forEach((eachTickets) => {
       totalPrice += eachTickets?.cost * eachTickets?.quantity;
     });
 
-    const userAnswerArray = createUserAnswerArray(data);
-    setUserAnswerArray(userAnswerArray);
     if (totalPrice === 0) {
       handleFreeEventHandler({
         walletAddress: randomizeLastFourDigits(
@@ -194,7 +186,6 @@ const Checkout: React.FC<CheckoutProps> = ({
         eventAddress: eventDetailsWithId?.eventAddress,
         email: "package@gmail.com",
         tickets: data,
-        userAnswerArray,
       });
     } else {
       setOpenPaymentsModal(true);
@@ -261,33 +252,37 @@ const Checkout: React.FC<CheckoutProps> = ({
       tickets,
       ...(coupon ? { discountCode: coupon } : {}),
     };
-
     let _request;
+
     setIsSubmitting(true);
     try {
-      const res = await fetch(`${BACKEND_URL}/api/payment/paystack`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        `${GET_BACKEND_URL(isTest)}/api/payment/paystack`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const result = await res.json();
       _request = result?.data;
-
-      const data = {
-        email,
-        amount: _request.amountToPay,
-        tickets: tickets,
-        eventAddress,
-      };
+      setPaymentDetails(_request);
+      setIsListening(true);
+      // const data = {
+      //   email,
+      //   amount: _request.amountToPay,
+      //   tickets: tickets,
+      //   eventAddress,
+      // };
       const amount = totalPrice * rate * 100;
 
       const _payStack = new paystackModal();
 
       _payStack.newTransaction({
-        key: PAYSTACK_KEY,
+        key: GET_PAYSTACK_KEY(isTest),
         amount: amount.toString() === "0" ? 1 : amount,
         currency: "NGN",
         email,
@@ -319,17 +314,19 @@ const Checkout: React.FC<CheckoutProps> = ({
         onLoad() {},
         onSuccess(transaction) {
           setShowTicketPurchaseSuccess(true);
+          setOpenConfirmationModal(true);
           setOpenPaymentsModal(false);
         },
         onCancel() {
           setIsSubmitting(false);
+          setIsListening(false);
         },
         onError() {
           setIsSubmitting(false);
         },
       });
 
-      await submitUserAnswers(userAnswerArray);
+      // await submitUserAnswers(userAnswerArray);
     } catch (e) {
       setIsSubmitting(false);
     }
@@ -346,7 +343,7 @@ const Checkout: React.FC<CheckoutProps> = ({
   const handleCoupon = async (eventAddress: string, code: string) => {
     try {
       setShowApplyCoupon(true);
-      const res = await fetch(`${BACKEND_URL}/api/discount/check`, {
+      const res = await fetch(`${GET_BACKEND_URL(isTest)}/api/discount/check`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -378,7 +375,18 @@ const Checkout: React.FC<CheckoutProps> = ({
       const costMap: any =
         updatedTicketsData &&
         updatedTicketsData
-          .map((elem: any, index) => ({ ...elem, _ticketType: index + 1 }))
+          .map((elem: any, index) => {
+            const earlyBirdActive = isEarlyBirdActive(elem?.earlyBird);
+            const finalCost = earlyBirdActive
+              ? elem?.discountedPrice ?? elem?.cost ?? 0
+              : elem?.cost ?? 0;
+
+            return {
+              ...elem,
+              _ticketType: index + 1,
+              cost: finalCost,
+            };
+          })
           .reduce(
             (result, value) => ({
               ...result,

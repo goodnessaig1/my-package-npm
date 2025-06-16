@@ -1,20 +1,25 @@
 @media (min-width: 768px) {
-  .go-back-btn {
+  .gruve-echo-go-back-btn {
     order: 1 !important;
   }
-  .submit-btn {
+
+  .gruve-event-loader-container-order {
     order: 2 !important;
   }
-  .ctn-container {
+
+  .gruve-echo-submit-btn {
+    order: 2 !important;
+  }
+  .gruve-echo-ctn-container {
     flex-direction: row !important;
     justify-content: space-between !important;
   }
-  .ctn-container * {
+  .gruve-echo-ctn-container * {
     width: 50%;
   }
 }
 
-.ctn-container {
+.gruve-echo-ctn-container {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -24,26 +29,31 @@
   padding-top: 16px;
 }
 
-.ctn-container * {
+.gruve-echo-ctn-container * {
   width: 100%;
   border-radius: 56px;
   height: 56px;
 }
 
-.go-back-btn {
+.gruve-echo-go-back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   order: 2;
   border: 1px solid #e1e1e8;
 }
-.go-back-btn:hover {
+
+.gruve-echo-go-back-btn:hover {
   background: #f7f7f7;
   cursor: pointer;
   transition: 300ms ease-in-out;
 }
 
-.submit-btn {
+.gruve-event-loader-container-order {
+  order: 1;
+}
+
+.gruve-echo-submit-btn {
   background-color: #ea445a;
   color: white;
   font-weight: bold;
@@ -52,40 +62,40 @@
   cursor: pointer;
 }
 
-.submit-btn:hover {
+.gruve-echo-submit-btn:hover {
   cursor: pointer;
   transition: 200ms ease-in-out;
   opacity: 70%;
 }
 
-.form-group {
+.gruve-echo-form-group {
   padding-top: 20px;
 }
 
-.form-gr-t {
+.gruve-echo-form-gr-t {
   padding-top: 16px;
 }
-.form-group label {
+.gruve-echo-form-group label {
   display: block;
   font-size: 18px;
   font-weight: 900;
 }
 
-.form-group span {
+.gruve-echo-form-group span {
   font-size: 14px;
   color: #666481;
   line-height: 20px;
 }
 
-.radio-options label {
+.gruve-echo-radio-options label {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-input,
-select,
-textarea {
+.gruve-package-s input,
+.gruve-package-s select,
+.gruve-package-s textarea {
   padding: 0.75rem;
   border: 1px solid #e1e1e8;
   border-radius: 0.5rem;
@@ -93,13 +103,13 @@ textarea {
   color: #666481;
 }
 
-.radio-options {
+.gruve-echo-radio-options {
   display: flex;
   gap: 1rem;
   margin-top: 0.55rem;
 }
 
-.ticket-section {
+.gruve-echo-ticket-section {
   border: 1px solid #e1e1e8 !important;
   padding: 1rem !important;
   display: flex;
@@ -111,19 +121,19 @@ textarea {
   border-radius: 0.5rem;
 }
 
-.form-items {
+.gruve-echo-form-items {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.ticket-header {
+.gruve-echo-ticket-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.delete-btn {
+.gruve-echo-delete-btn {
   background: none;
   display: flex;
   align-items: center;
@@ -133,42 +143,46 @@ textarea {
   cursor: pointer;
 }
 
-.whatsapp-input {
+.gruve-echo-whatsapp-input {
   display: flex;
   gap: 0.5rem;
   align-items: center;
 }
 
-.whatsapp-input span {
+.gruve-echo-whatsapp-input span {
   padding: 0.75rem;
   background: #f0f0f0;
   border-radius: 0.5rem;
 }
 
-.error-text {
-  color: red;
+.gruve-echo-error-text {
+  color: #ea445a;
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
-input[type="radio"] {
+.gruve-package-s input[type="radio"] {
   accent-color: #ea445a;
 }
 
-.coupon-top h3 {
+.gruve-package-s input[type="checkbox"] {
+  accent-color: #ea445a;
+}
+
+.gruve-echo-coupon-top h3 {
   font-weight: 900;
   font-size: 18px;
   color: #2d2b4a;
 }
 
-.coupon-top span {
+.gruve-echo-coupon-top span {
   font-weight: 300;
   font-size: 18px;
   color: #666481;
   font-style: italic;
 }
 
-.coupon-container {
+.gruve-echo-coupon-container {
   padding-top: 1rem;
   display: flex;
   flex-direction: column;
@@ -181,7 +195,7 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-.coupon-input {
+.gruve-package-s .gruve-echo-coupon-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -191,7 +205,7 @@ input[type="radio"] {
   font-size: 1rem;
 }
 
-.coupon-input input {
+.gruve-package-s .gruve-echo-coupon-input input {
   width: 100%;
   padding: 0;
   border: none;
@@ -200,45 +214,47 @@ input[type="radio"] {
   outline: none;
 }
 
-.questions-container {
+.gruve-echo-questions-container {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.questions-container h3 {
+.gruve-echo-questions-container h3 {
   font-weight: 900;
   font-size: 18px;
   color: #2d2b4a;
 }
-.questionss {
+
+.gruve-echo-questionss {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.question-card {
+.gruve-echo-question-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.question-card label {
+.gruve-echo-question-card label {
   font-size: 14px;
   font-weight: normal;
   color: #2d2b4a;
 }
-.question-card > label > span {
+
+.gruve-echo-question-card > label > span {
   color: #ea445a;
 }
 
-.form-cont {
+.gruve-echo-form-cont {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-cont label {
+.gruve-echo-form-cont label {
   color: #2d2b4a;
   font-size: 14px;
   line-height: 20px;
@@ -246,59 +262,59 @@ input[type="radio"] {
   font-weight: normal;
 }
 
-.error-msg {
+.gruve-echo-error-msg {
   color: #ea445a;
   font-size: 14px;
 }
 
-.whatsapp-container {
+.gruve-echo-whatsapp-container {
   border: 1px solid #e1e1e8;
   border-radius: 8px;
 }
 
-.code-input {
+.gruve-echo-code-input {
   padding: 0 8px;
   border-right: #e1e1e8 1px solid;
 }
 
-input:-internal-autofill-selected {
+.gruve-package-s input:-internal-autofill-selected {
   appearance: menulist-button;
   background-image: none !important;
   background-color: transparent !important;
   color: fieldtext !important;
 }
 
-.disable {
+.gruve-echo-disable {
   color: #ed8593;
 }
-.disable:hover {
+.gruve-echo-disable:hover {
   cursor: not-allowed;
 }
 
-.toggle-wrapper {
+.gruve-echo-toggle-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.toggle-wrapper > span {
+.gruve-echo-toggle-wrapper > span {
   color: #666481;
   font-size: 14px;
   margin-top: -10px;
 }
 
-.toggle-switch {
+.gruve-echo-toggle-switch {
   position: relative;
   display: inline-block;
   width: 44px;
   height: 24px;
 }
 
-.toggle-switch input {
+.gruve-echo-toggle-switch input {
   display: none;
 }
 
-.slider {
+.gruve-echo-slider {
   background-color: #ccc;
   border-radius: 34px;
   cursor: pointer;
@@ -307,15 +323,15 @@ input:-internal-autofill-selected {
   transition: 0.4s;
 }
 
-.toggle-switch input:checked + .slider {
+.gruve-echo-toggle-switch input:checked + .gruve-echo-slider {
   background-color: #ea445a;
 }
 
-.toggle-switch input:checked + .slider::before {
+.gruve-echo-toggle-switch input:checked + .gruve-echo-slider::before {
   transform: translateX(19px);
 }
 
-.icon {
+.gruve-echo-icon {
   position: absolute;
   width: 100%;
   text-align: center;
@@ -326,7 +342,7 @@ input:-internal-autofill-selected {
   transition: all 0.3s ease;
 }
 
-.knob {
+.gruve-echo-knob {
   position: absolute;
   height: 20px;
   width: 20px;
@@ -340,15 +356,15 @@ input:-internal-autofill-selected {
   justify-content: center;
 }
 
-.toggle-switch input:checked + .slider {
+.gruve-echo-toggle-switch input:checked + .gruve-echo-slider {
   background-color: #de919f;
 }
 
-.toggle-switch input:checked + .slider .knob {
+.gruve-echo-toggle-switch input:checked + .gruve-echo-slider .gruve-echo-knob {
   transform: translateX(20px);
 }
 
-.icon-wrapper {
+.gruve-echo-icon-wrapper {
   transition: opacity 0.3s ease, transform 0.3s ease;
   display: flex;
   align-items: center;
