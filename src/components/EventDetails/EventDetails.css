@@ -112,6 +112,8 @@
   color: #111021;
   line-height: 48px;
   letter-spacing: 0;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
 }
 
 .gruve-echo-date-container {

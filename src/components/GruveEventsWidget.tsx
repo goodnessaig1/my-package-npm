@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EventDetails from "./EventDetails/EventDetails";
 import { IEventType, QuestionList, TicketDiscountList } from "../../types/echo";
 import "./index.css";
+import "../styles/fonts.module.css";
 import "../styles/global.module.css";
 import { GET_BACKEND_URL, GET_BASE_URL } from "../utils/utils";
 import "../components/Loader/loader.css";

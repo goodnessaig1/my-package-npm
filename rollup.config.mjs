@@ -34,7 +34,11 @@ export default {
   globals: {
     react: "React",
     "react-dom": "ReactDOM",
-    "react/jsx-runtime": "jsxRuntime", 
+    // "react/jsx-runtime": "jsxRuntime", 
+    
+"react-dom/client": "ReactDOM", // ✅ Add this line
+      "react/jsx-runtime": "jsxRuntime",
+
   },
   sourcemap: true,
 }
@@ -51,13 +55,34 @@ export default {
     //   sourcemap: true,
     // },
   ],
-  external: ["react", "react-dom"],
+  // external: ["react", "react-dom"],
+  external: ["react", "react-dom", "react-dom/client"],
+
   plugins: [
     external(),
     postcss({
-       extract: 'gruve-widgets.css', // Writes all styles to this CSS file in /dist
-  modules: false,               // Set to true ONLY if you're doing: import styles from './x.module.css'
-  minimize: true, 
+
+
+extract: false, // ✅ Inline styles into JS
+  modules: {
+    generateScopedName: "[name]__[local]___[hash:base64:5]",
+  },
+  minimize: true,
+
+
+// extract: false, // ⬅️ This inlines the CSS into the JS bundle
+//   modules: {
+//     generateScopedName: "[name]__[local]___[hash:base64:5]",
+//   },
+//   minimize: true, 
+
+      //        extract: 'gruve-widgets.css', // Writes all styles to this CSS file in /dist
+  
+      
+// modules: {
+//     generateScopedName: "[name]__[local]___[hash:base64:5]",
+//   },
+
       // modules: {
       //   generateScopedName: "[name]__[local]___[hash:base64:5]",
       // },
