@@ -94,6 +94,8 @@
   font-size: 18px;
   color: #2d2b4a;
   font-weight: 900;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
 }
 
 .gruve-echo-early-bird {

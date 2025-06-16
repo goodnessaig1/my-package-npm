@@ -9,7 +9,7 @@ import pkg from "./package.json" with { type: "json" };
 import replace from "@rollup/plugin-replace";
 
 
-const extensions = [".js", ".jsx", ".ts", ".tsx"];
+const extensions = [ ".js", ".jsx", ".ts", ".tsx" ];
 
 export default {
   input: "src/index.tsx",
@@ -27,68 +27,56 @@ export default {
       sourcemap: true,
     },
 
-{
-  file: "dist/index.umd.js",
-  format: "umd",
-  name: "GruveEventsWidget",
-  globals: {
-    react: "React",
-    "react-dom": "ReactDOM",
-    "react/jsx-runtime": "jsxRuntime", 
-  },
-  sourcemap: true,
-}
-
-    // {
-    //   file: "dist/index.umd.js",
-    //   format: "umd",
-    //   name: "GruveEventsWidget",
-    //   globals: {
-    //     react: "React",
-    //     "react-dom": "ReactDOM",
-    //     "react/jsx-runtime": "jsxRuntime", 
-    //   },
-    //   sourcemap: true,
-    // },
+    {
+      file: "dist/index.umd.js",
+      format: "umd",
+      name: "GruveEventsWidget",
+      globals: {
+        react: "React",
+        "react-dom": "ReactDOM",
+        "react-dom/client": "ReactDOM",
+        "react/jsx-runtime": "jsxRuntime",
+      },
+      sourcemap: true,
+    }
   ],
-  external: ["react", "react-dom"],
+  external: [ "react", "react-dom", "react-dom/client" ],
+
   plugins: [
     external(),
-    postcss({
-       extract: 'gruve-widgets.css', // Writes all styles to this CSS file in /dist
-  modules: false,               // Set to true ONLY if you're doing: import styles from './x.module.css'
-  minimize: true, 
-      // modules: {
-      //   generateScopedName: "[name]__[local]___[hash:base64:5]",
-      // },
-    }),
+    postcss( {
+      extract: false,
+      modules: {
+        generateScopedName: "[name]__[local]___[hash:base64:5]",
+      },
+      minimize: true,
+    } ),
     resolve( { extensions } ),
-    
-replace({
-  preventAssignment: true,
-  "process.env.NODE_ENV": JSON.stringify("production"),
-}),
+
+    replace( {
+      preventAssignment: true,
+      "process.env.NODE_ENV": JSON.stringify( "production" ),
+    } ),
 
     commonjs(),
-    typescript({
+    typescript( {
       useTsconfigDeclarationDir: true,
       clean: true,
-    }),
-    babel({
-  extensions,
-  babelHelpers: "bundled",
-  exclude: ["node_modules/**"],
-  presets: [
-    [
-      "@babel/preset-react",
-      {
-        runtime: "classic", // 👈 force classic runtime
-      },
-    ],
-    "@babel/preset-typescript",
-  ],
-}),
-
+    } ),
+    babel( {
+      extensions,
+      babelHelpers: "bundled",
+      exclude: [ "node_modules/**" ],
+      presets: [
+        [
+          "@babel/preset-react",
+          {
+            runtime: "classic",
+          },
+        ],
+        "@babel/preset-typescript",
+      ],
+    } ),
     terser(),
   ],
 };

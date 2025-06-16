@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.css";
+import "../styles/fonts.module.css";
 import "../styles/global.module.css";
 import "../components/Loader/loader.css";
 export interface TagsOptions {

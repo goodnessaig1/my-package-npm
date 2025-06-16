@@ -233,6 +233,7 @@ const EventDetails: React.FC<EventDetailsProps> = ({
                           style={{
                             background: buttonColor,
                             color: buttonTextColor,
+                            border: "none",
                           }}
                           className={`gruve-echo-get-tickets-btn ${
                             !isSelected && "gruve-echo-not-selected"

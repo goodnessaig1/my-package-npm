@@ -2,35 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Gruve Widget Test</title>
-    <!-- Load React and ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <link rel="stylesheet" href="/dist/gruve-widgets.css" />
-
-    <!-- <script src="https://unpkg.com/echo-test-goody@0.0.2/dist/index.umd.js"></script> -->
-
-    <script src="/dist/index.umd.js"></script>
-  </head>
+     <script src="https://unpkg.com/echo-test-goody@latest/dist/index.umd.js"></script>
   <body>
     <div id="root"></div>
-
     <script>
-      const { GruveEventWidgets } = window.GruveEventsWidget;
-
-      ReactDOM.render(
-        React.createElement(GruveEventWidgets, {
+      const widget = new window.GruveEventsWidget.GruveWidget();
+      widget.render({
+        target: "#root",
+        props: {
           eventAddress: "0xf0aedb30a57d9848e70ade634fc94e4d8cf052f6",
           isTest: true,
 
           config: {
             background: "#ea445a",
-            border: "none",
-            displayText: "Purchase tickets",
           },
-        }),
-        document.getElementById("root")
-      );
+        },
+      });
     </script>
   </body>
 </html>

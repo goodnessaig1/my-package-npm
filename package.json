@@ -1,6 +1,6 @@
 {
   "name": "echo-test-goody",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "GruveEventWidgets is a React component that allows users to display and manage event ticket selections easily.  It handles event display, ticket purchase flows, and supports customization like theme color and ticket selection handling.",
   "author": "xlassix",
   "main": "dist/index.js",
