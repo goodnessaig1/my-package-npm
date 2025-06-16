@@ -1,3 +1,4 @@
+import React from "react";
 import "./loader.css";
-declare const Loader: () => import("react/jsx-runtime").JSX.Element;
+declare const Loader: () => React.JSX.Element;
 export default Loader;

@@ -1,3 +1,5 @@
+import React from "react";
+
 export const ToggleSwitchOn = (props: any) => {
   return (
     <svg

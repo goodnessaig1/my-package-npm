@@ -1,2 +1,3 @@
-declare const DeleteIcon: () => import("react/jsx-runtime").JSX.Element;
+import React from "react";
+declare const DeleteIcon: () => React.JSX.Element;
 export default DeleteIcon;

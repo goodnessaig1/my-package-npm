@@ -1,3 +1,4 @@
+import React from "react";
 import "./EventDetails.css";
 import type { ReactNode } from "react";
 type ModalProps = {
@@ -7,5 +8,5 @@ type ModalProps = {
     openCheckout: boolean;
     children?: ReactNode;
 };
-declare const Modal: ({ isOpen, openCheckout, openPaymentsModal, children, openRegistration, }: ModalProps) => import("react/jsx-runtime").JSX.Element | null;
+declare const Modal: ({ isOpen, openCheckout, openPaymentsModal, children, openRegistration, }: ModalProps) => React.JSX.Element | null;
 export default Modal;

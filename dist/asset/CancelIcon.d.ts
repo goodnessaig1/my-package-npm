@@ -1,2 +1,3 @@
-declare const CancelIcon: () => import("react/jsx-runtime").JSX.Element;
+import React from "react";
+declare const CancelIcon: () => React.JSX.Element;
 export default CancelIcon;

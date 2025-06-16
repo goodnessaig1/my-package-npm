@@ -1,3 +1,4 @@
+import React from "react";
 export declare const CountDown: ({ date }: {
     date: string;
-}) => import("react/jsx-runtime").JSX.Element;
+}) => React.JSX.Element;

@@ -1,1 +1,2 @@
-export declare const SucessfulConnect: (props: any) => import("react/jsx-runtime").JSX.Element;
+import React from "react";
+export declare const SucessfulConnect: (props: any) => React.JSX.Element;
