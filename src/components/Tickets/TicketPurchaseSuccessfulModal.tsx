@@ -41,7 +41,6 @@ const TicketPurchaseSuccessfulModal: React.FC<Props> = ({
 }) => {
   const eventSourceRef = useRef<EventSource | null>(null);
   const [imageList, setImageList] = useState<ImageInfo[]>([]);
-  // const BASE_IMAGE_URL = `${process.env.NEXT_PUBLIC_PAYMENT_SERVICES}/ipfs`;
   const BACKEND_URL = GET_BACKEND_URL(isTest);
   const BASE_IMAGE_URL = `${BACKEND_URL}/ipfs`;
 

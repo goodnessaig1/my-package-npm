@@ -189,7 +189,7 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
       ) : (
         <button
           onClick={handleClick}
-          style={{ ...config }}
+          style={{ border: "none", ...config }}
           className="gruve-event-details-btn"
         >
           {buttonText}

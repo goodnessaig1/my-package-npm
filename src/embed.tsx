@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-// import GruveEventWidgets from "./components/GruveEventsWidget";
 import type { GruveEventWidgetsProps } from "./components/GruveEventsWidget";
 import GruveEventWidgets from "./components/GruveEventsWidget";
 
