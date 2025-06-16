@@ -5,9 +5,11 @@ import { countryCodes } from "../../utils/counties";
 export default function WhatsAppInput({
   index,
   fieldName,
+  showLabel = true,
 }: {
   index: any;
   fieldName: string;
+  showLabel?: boolean;
 }) {
   const [field] = useField(fieldName);
   const { setFieldValue, values } = useFormikContext();
@@ -53,17 +55,19 @@ export default function WhatsAppInput({
   }, []);
 
   return (
-    <div className="form-cont" ref={dropdownRef}>
-      <label htmlFor={fieldName}>
-        {index ? "WhatsApp No" : "Receiver's WhatsApp No"}
-      </label>
+    <div className="gruve-echo-form-cont" ref={dropdownRef}>
+      {showLabel && (
+        <label htmlFor={fieldName}>
+          {index ? "WhatsApp No" : "Receiver's WhatsApp No"}
+        </label>
+      )}
 
       <div
-        className="whatsapp-container"
+        className="gruve-echo-whatsapp-container"
         style={{ display: "flex", alignItems: "center", position: "relative" }}
       >
         <div
-          className="code-input"
+          className="gruve-echo-code-input"
           style={{
             display: "flex",
             alignItems: "center",
@@ -87,7 +91,7 @@ export default function WhatsAppInput({
         </div>
 
         {dropdownOpen && (
-          <ul
+          <div
             style={{
               position: "absolute",
               top: "100%",
@@ -102,8 +106,9 @@ export default function WhatsAppInput({
             }}
           >
             {countryCodes.map((country, idx) => (
-              <li
+              <div
                 key={idx}
+                className="gruve-echo-list-items"
                 onClick={() => handleCountryChange(country.code)}
                 style={{
                   padding: "8px",
@@ -116,9 +121,9 @@ export default function WhatsAppInput({
               >
                 <span>{country.country}</span>
                 <span>+{country.code}</span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
 
         <input

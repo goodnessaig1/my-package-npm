@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import EventDetails from "./EventDetails/EventDetails";
-import {
-  ComponentProps,
-  IEventType,
-  QuestionList,
-  TicketDiscountList,
-} from "../types/event-types";
+import { IEventType, QuestionList, TicketDiscountList } from "../../types/echo";
 import "./index.css";
-import "../styles/global.css";
-import Loader from "./Loader/Loader";
-
+import "../styles/global.module.css";
+import { GET_BACKEND_URL, GET_BASE_URL } from "../utils/utils";
+import "../components/Loader/loader.css";
 export interface TagsOptions {
   value: string;
   label: string;
@@ -29,6 +24,29 @@ export interface IEventInfo {
   _eventName: string;
   eventLink?: any;
 }
+
+type QuestionType =
+  | "text"
+  | "email"
+  | "website"
+  | "phone"
+  | "checkbox"
+  | "terms"
+  | "multiple"
+  | "socials"
+  | "single";
+
+export type IRegistrationQuestion = {
+  id: string;
+  title: string;
+  type: QuestionType;
+  required: boolean;
+  options?: any[]; // You can replace `any` with a specific type if you know the structure
+  termsContent?: string;
+  termsLink?: string;
+  socials?: string;
+  checkbox?: boolean;
+};
 
 export interface IEventData {
   timeZone: any;
@@ -51,6 +69,8 @@ export interface IEventData {
   }[];
   guests: any[];
   tickets: IITickets;
+  ticketingOption: string;
+  registrationQuestions: IRegistrationQuestion[];
 }
 
 export type IITickets = {
@@ -68,15 +88,18 @@ export type IITickets = {
 export interface GruveEventWidgetsProps {
   eventAddress: string;
   isTest?: boolean;
-  config?: {
-    buttonColor: string;
+  config?: React.CSSProperties & {
+    themeColor?: string;
+    displayText?: string;
   };
+  children?: React.ReactNode;
 }
 
 const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   eventAddress,
   isTest = false,
   config,
+  children,
 }) => {
   const [eventDetails, setEventDetails] = useState<IEventData | null>(null);
   const [eventDetailsWithId, setEventDetailsWithId] =
@@ -86,19 +109,14 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   const [ticketBalances, setTicketBalances] = useState([]);
   const [couponData, setCouponData] = useState<TicketDiscountList>([]);
 
-  const BASE_URL = isTest
-    ? "http://localhost:3000"
-    : "https://beta.gruve.events";
-
-  const BACKEND_URL = isTest
-    ? "https://backend.gruve.events"
-    : "https://secure.gruve.events";
-
   const [rates, setRates] = useState({});
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
+
+  const BASE_URL = GET_BASE_URL(isTest);
+  const BACKEND_URL = GET_BACKEND_URL(isTest);
 
   const fetchRates = async () => {
     try {
@@ -154,26 +172,31 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
   const handleClick = () => {
     fetchCoupon();
     setOpen(true);
-    if (!eventDetails) {
+    if (!eventDetails || eventDetailsWithId?.eventAddress !== eventAddress) {
       fetchEventDetails();
       fetchRates();
     }
   };
 
-  const buttonColor = config?.buttonColor ? config?.buttonColor : "#ea445a";
-
+  const buttonColor = config?.themeColor ? config?.themeColor : "#ea445a";
+  const buttonText = config?.displayText ? config?.displayText : "Get ticket";
+  const buttonTextColor = config?.color ? config.color : "white";
   return (
-    <div className="">
-      <div
-        onClick={handleClick}
-        style={{ background: buttonColor }}
-        className="event-details-btn"
-      >
-        Get ticket
-      </div>
+    <div className="my-package-container gruve-package-s">
+      {children ? (
+        <div onClick={handleClick}>{children}</div>
+      ) : (
+        <button
+          onClick={handleClick}
+          style={{ ...config }}
+          className="gruve-event-details-btn"
+        >
+          {buttonText}
+        </button>
+      )}
       {loading ? (
-        <div className="loader-container_">
-          <Loader />
+        <div className="_">
+          <span className="gruve-package-echo-home-loader"></span>
         </div>
       ) : (
         <EventDetails
@@ -186,9 +209,9 @@ const GruveEventWidgets: React.FC<GruveEventWidgetsProps> = ({
           coupons={coupons}
           couponData={couponData}
           ticketBalances={ticketBalances}
-          BACKEND_URL={BACKEND_URL}
-          BASE_URL={BASE_URL}
+          isTest={isTest}
           buttonColor={buttonColor}
+          buttonTextColor={buttonTextColor}
         />
       )}
     </div>

@@ -1,0 +1,26 @@
+@import "./fonts.module.css";
+
+:root {
+  --font-primary: "Satoshi", sans-serif;
+}
+
+.gruve-package-s * {
+  font-family: var(--font-primary);
+  letter-spacing: 0;
+}
+
+.gruve-package-s h1,
+.gruve-package-s h2,
+.gruve-package-s h3,
+.gruve-package-s h4,
+.gruve-package-s h5,
+.gruve-package-s h6,
+.gruve-package-s p,
+.gruve-package-s ul,
+.gruve-package-s ol,
+.gruve-package-s li,
+.gruve-package-s button {
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+  font-weight: 300;
+}

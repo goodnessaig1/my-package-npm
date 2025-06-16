@@ -14,18 +14,18 @@ export const CountDown = ({ date }: { date: string }) => {
   const currentDate = new Date();
 
   return (
-    <div className="countdown">
+    <div className="gruve-echo-countdown">
       {eventDate > currentDate ? (
-        <div className="countdown-flex">
+        <div className="gruve-echo-countdown-flex">
           {[
             { label: "Days", value: day },
             { label: "Hours", value: hour },
             { label: "Mins", value: minute },
             { label: "Secs", value: second },
           ].map((item, idx) => (
-            <div key={idx} className="countdown-item">
-              <div className="countdown-circle">{item.value}</div>
-              <span className="countdown-label">{item.label}</span>
+            <div key={idx} className="gruve-echo-countdown-item">
+              <div className="gruve-echo-countdown-circle">{item.value}</div>
+              <span className="gruve-echo-countdown-label">{item.label}</span>
             </div>
           ))}
         </div>

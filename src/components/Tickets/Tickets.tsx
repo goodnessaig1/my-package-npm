@@ -45,38 +45,38 @@ const Tickets: React.FC<TicketsProps> = ({
     setDropdownOpen(false);
     setCurrentCurrency(currency);
   };
+
   return (
-    <div className="tickets-container">
-      <div className="choose-ticket-box">
-        <div className="choose-ticket-header">
-          <p className="choose-ticket-title">Choose your ticket</p>
+    <div className="gruve-echo-tickets-container">
+      <div className="gruve-echo-choose-ticket-box">
+        <div className="choose-gruve-echo-ticket-header">
+          <p className="gruve-echo-choose-ticket-title">Choose your ticket</p>
           <div ref={dropdownRef} className="">
             <div
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="currency-select"
+              className="gruve-echo-currency-select"
             >
               <span>{currentCurrency}</span>
               <SvgDropDown color="#111021" />
             </div>
             {dropdownOpen && (
-              <ul
+              <div
                 style={{
                   position: "absolute",
-                  top: "100%",
                   width: "60px",
                   backgroundColor: "#fff",
                   border: "1px solid #ccc",
                   zIndex: 9999,
                   overflowY: "auto",
                   borderRadius: "8px",
-                  marginTop: "32px",
+                  marginTop: "4px",
                   marginLeft: "4px",
                 }}
               >
                 {supportedCurrency.map((currency, idx) => (
-                  <li
+                  <div
                     key={idx}
-                    className="currency-list"
+                    className="gruve-echo-list-items"
                     onClick={() => handleChange(currency)}
                     style={{
                       padding: "8px",
@@ -88,9 +88,9 @@ const Tickets: React.FC<TicketsProps> = ({
                     }}
                   >
                     <span>{currency}</span>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
           </div>
         </div>

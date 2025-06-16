@@ -1,22 +1,21 @@
-.location-container {
+.gruve-echo-location-container {
   display: flex;
   align-items: center;
   justify-content: start;
   gap: 1rem;
 }
 
-.location-icon-box {
+.gruve-echo-location-icon-box {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 40px;
-  padding: 0.5rem 0;
   border: 1px solid #e1e1e8;
   border-radius: 8px;
 }
 
-.location-link {
+.gruve-echo-location-link {
   margin-bottom: 0.5rem;
   display: inline-block;
   border-bottom: 1px solid transparent;
@@ -27,12 +26,12 @@
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.location-link:hover {
+.gruve-echo-location-link:hover {
   border-color: #375dfb;
   color: #375dfb;
 }
 
-.location-text {
+.gruve-echo-location-text {
   font-size: 0.875rem;
   color: #4a5568;
   font-weight: 500;

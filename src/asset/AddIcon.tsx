@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddIcon = () => {
+const AddIcon = (props: any) => {
   return (
     <svg
       width="20"
@@ -8,6 +8,7 @@ const AddIcon = () => {
       viewBox="0 0 20 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <path d="M5 10.5H15" stroke="#666481" />
       <path d="M10 15.5V5.5" stroke="#666481" />

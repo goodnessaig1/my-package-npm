@@ -1,0 +1,72 @@
+.gruve-echo-registration__ {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.gruve-echo-registration-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.gruve-echo-registration-header {
+  color: #111021;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+.gruve-echo-registration-div {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: #e1e1e8 solid 1px;
+  border-radius: 16px;
+}
+
+.gruve-echo-registration-div > p {
+  color: #666481;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+}
+
+.gruve-echo-registration_form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gruve-echo-registration_form-group label {
+  color: #2d2b4a;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  font-weight: normal;
+}
+
+.gruve-echo-registration-form__ {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.gruve-echo-registration-reqired {
+  font-size: 14px;
+  color: #ea445a;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+.gruve-echo-error-registration {
+  color: #ea445a;
+  font-size: 0.9rem;
+}
+
+.gruve-echo-registration-radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

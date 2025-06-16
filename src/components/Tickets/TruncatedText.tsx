@@ -23,17 +23,19 @@ const TruncatedText = ({ text }: { text: string }) => {
   };
 
   return (
-    <div className="truncated-container">
+    <div className="gruve-echo-truncated-container">
       <p
         ref={ref}
-        className={`truncated-text ${isTruncated ? "truncated" : ""}`}
+        className={`gruve-echo-truncated-text ${
+          isTruncated ? "gruve-echo-truncated" : ""
+        }`}
         onClick={toggleTruncation}
       >
         {text}
       </p>
 
       {showToggle && (
-        <span className="read-toggle" onClick={toggleTruncation}>
+        <span className="gruve-echo-read-toggle" onClick={toggleTruncation}>
           {isTruncated ? "Read more" : "Read Less"}
         </span>
       )}
@@ -42,3 +44,38 @@ const TruncatedText = ({ text }: { text: string }) => {
 };
 
 export default TruncatedText;
+
+export const TruncatedHtmlContent = ({ htmlContent }: any) => {
+  const [isTruncated, setIsTruncated] = useState(true);
+  const [showToggle, setShowToggle] = useState(false);
+  const contentRef = useRef<any>(null);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const contentHeight = contentRef.current.scrollHeight;
+      const containerHeight = 80;
+      setShowToggle(contentHeight > containerHeight);
+    }
+  }, [htmlContent]);
+
+  const toggleTruncation = () => {
+    setIsTruncated(!isTruncated);
+  };
+
+  return (
+    <div ref={containerRef}>
+      <div
+        ref={contentRef}
+        className={`ql-editor ${isTruncated ? "truncated" : ""}`}
+        dangerouslySetInnerHTML={{ __html: htmlContent || "" }}
+      />
+
+      {showToggle && (
+        <span className="gruve-echo-read-toggle" onClick={toggleTruncation}>
+          {isTruncated ? "Read more" : "Read Less"}
+        </span>
+      )}
+    </div>
+  );
+};
