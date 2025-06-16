@@ -1,5 +1,6 @@
+import React from "react";
 import "./Location.css";
 declare const Location: ({ location }: {
     location: any;
-}) => import("react/jsx-runtime").JSX.Element;
+}) => React.JSX.Element;
 export default Location;

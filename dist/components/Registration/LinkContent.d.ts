@@ -1,4 +1,5 @@
+import React from "react";
 declare const LinkedContent: ({ content }: {
     content: string;
-}) => import("react/jsx-runtime").JSX.Element;
+}) => React.JSX.Element;
 export default LinkedContent;

@@ -1,3 +1,4 @@
+import React from "react";
 export type RatesProp = {
     [key: string]: any;
 };
@@ -45,5 +46,5 @@ export type ITicket = {
     };
     discountedPrice?: number;
 };
-export default function TicketCounter({ tickets, currentCurrency, eventDetails, rates, setSelectedTickets, selectedTickets, ticketBalances, }: TicketCounterPorps): import("react/jsx-runtime").JSX.Element;
+export default function TicketCounter({ tickets, currentCurrency, eventDetails, rates, setSelectedTickets, selectedTickets, ticketBalances, }: TicketCounterPorps): React.JSX.Element;
 export {};

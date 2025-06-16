@@ -1,6 +1,7 @@
+import React from "react";
 import "./TruncatedText.css";
 declare const TruncatedText: ({ text }: {
     text: string;
-}) => import("react/jsx-runtime").JSX.Element;
+}) => React.JSX.Element;
 export default TruncatedText;
-export declare const TruncatedHtmlContent: ({ htmlContent }: any) => import("react/jsx-runtime").JSX.Element;
+export declare const TruncatedHtmlContent: ({ htmlContent }: any) => React.JSX.Element;

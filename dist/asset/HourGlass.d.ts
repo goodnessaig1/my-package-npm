@@ -1,1 +1,2 @@
-export declare const HourGlass: () => import("react/jsx-runtime").JSX.Element;
+import React from "react";
+export declare const HourGlass: () => React.JSX.Element;
